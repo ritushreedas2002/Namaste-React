@@ -20,6 +20,8 @@ It includes extra checks and debugging information.
 LINK2 :USE :  Used in development environments along with React. It includes additional functionality related to 
 rendering React components in the DOM.
 
+
+
 -------------------------------------------------EPISODE 2--------------------------------------------------------------------------------
 
 //React.createElement=>Object=>HTML
@@ -121,3 +123,42 @@ cross-site scripting is the attack technique if js allows every one to access ur
 then it can steat ur local storage,cookies,read data
 
 jsx takes care of injection, it this malicious api passes data to ur code jsx jst escapes it (sanitizing the data)
+
+-------------------------------------------------EPISODE 4--------------------------------------------------------------------------------
+
+INLINE STYLING takes js object
+--------------------------------------
+
+const stylecard={
+    background-color:"yellow";
+}
+
+const Body = () => {
+  return (
+    <div className='body'>
+      <div className='search'>Search</div>
+      <div className='res-container' style={stylecard}>  //objects can be writtern within curly braces
+        <RestCard />
+      </div>
+    </div>
+  );
+}
+
+<div className='res-container' style={{background-color:"yellow";}}>
+//first { } taking js and second { } is the js obj 
+
+----REAL DATA is in JSON format----------
+
+Conflict driven UI-open swiggy ->offers available in benguluru,kol all are different
+so for not building diff UI for different places
+
+Conflict comes from backend
+---------------JSON------------------
+{
+"employee": {
+"name": "sonoo",
+"salary": 56000,
+"married": true.
+}
+}
+-----------------------------------------
