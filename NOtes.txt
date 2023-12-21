@@ -26,7 +26,7 @@ rendering React components in the DOM.
 
 //React.createElement=>Object=>HTML
 
-npm install -D parcel
+npm install -D parcel  //-D dev dependency
 npm -package manager
 dependency- The dependencies object specifies the packages that you need to run your code.
 
@@ -184,3 +184,35 @@ data.map((rest,index) => (
     <ResCard key={index} data={rest} />   //key is to identify each card as unique
 ))
 //INDEX is not recommended by React itself
+
+-------------------------------------------------EPISODE 5--------------------------------------------------------------------------------
+src folder-has the source code
+in src folder
+
+ALL hard coded data like links and dummy data are placed in another folder called utils
+
+Types of EXPORT/IMPORT 
+1.default (Components)
+-------export default (name)
+--------import (name) from './filename'
+
+2.Named (multiple exports)
+--------export const name=
+--------export const name2=
+--------import {name} from './filename'
+
+
+Default export can be done with the named export in thsi format:---------------
+// Named export
+export const myFunction = () => {
+  // ... function implementation
+};
+
+// Default export
+const MyComponent = () => {
+  // ... component implementation
+};
+
+export default MyComponent;
+
+
