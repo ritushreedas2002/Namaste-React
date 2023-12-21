@@ -33,7 +33,7 @@ dependency- The dependencies object specifies the packages that you need to run 
 
 dependency---1.dev dependency (in developement phase)   2.normal dependency (in developement phase + production phase)
 ^-caret (automatic minor updates e.g. version 2.8.3 to 2.8.4)
-~tildate (major updates e.g. 2.8.3 to 3.0.0)
+~tilde (major updates e.g. 2.8.3 to 3.0.0)
 
 
 package.json-mainly version of packages that the npm is handling (also the changes from minor to major) (configuration for our npm)
@@ -239,5 +239,5 @@ this will filter out those restaurants having rating more than 4 and sets the li
 This is called re-rendering. When a state variable changes react re-renders its omponents. As soon as the list of restaurants updates,
  react will very quickly removes the past data and updates with the new data.
 
- 
+
 
