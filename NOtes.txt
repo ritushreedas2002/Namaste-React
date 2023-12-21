@@ -32,8 +32,8 @@ dependency- The dependencies object specifies the packages that you need to run 
 
 
 dependency---1.dev dependency (in developement phase)   2.normal dependency (in developement phase + production phase)
-^-caret (change from minor to major version)
-~tildate (to change major components)
+^-caret (automatic minor updates e.g. version 2.8.3 to 2.8.4)
+~tildate (major updates e.g. 2.8.3 to 3.0.0)
 
 
 package.json-mainly version of packages that the npm is handling (also the changes from minor to major) (configuration for our npm)
@@ -215,4 +215,29 @@ const MyComponent = () => {
 
 export default MyComponent;
 
+onClick takes a call back function 
+----------
+onClick{()=>{}}
+
+
+REACT HOOKS  (//import from react as a named import)
+
+NOTE:when we change a normal variable it does not affect the UI so we use the hooks
+are normal js function given by react which have super powers used for DOM manipulation
+these are the utility function given by react.The two imp hooks are :useState() and useEffect()
+
+useState()-basically gives u super power react variable  keeps sync of data layer and UI layer
+const [listOfRestaurants, setListOfRestaurants] = useState();
+           |                     |                         |
+        default            what to be placed           default value(nothing exists)
+                           when an event occurs
+
+setListOfRestaurants(filteredList);
+means that listOfRestaurants=filteredList; after onCLick eventListerner
+
+this will filter out those restaurants having rating more than 4 and sets the listOfRestaurants
+This is called re-rendering. When a state variable changes react re-renders its omponents. As soon as the list of restaurants updates,
+ react will very quickly removes the past data and updates with the new data.
+
+ 
 
