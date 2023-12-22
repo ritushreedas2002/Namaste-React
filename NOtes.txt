@@ -227,9 +227,9 @@ are normal js function given by react which have super powers used for DOM manip
 these are the utility function given by react.The two imp hooks are :useState() and useEffect()
 
 useState()-basically gives u super power react variable  keeps sync of data layer and UI layer
-const [listOfRestaurants, setListOfRestaurants] = useState();
+const [listOfRestaurants, setListOfRestaurants] = useState(reslist);
            |                     |                         |
-        default            what to be placed           default value(nothing exists)
+        default            what to be placed           default value[array of objects]
                            when an event occurs
 
 setListOfRestaurants(filteredList);
@@ -239,5 +239,27 @@ this will filter out those restaurants having rating more than 4 and sets the li
 This is called re-rendering. When a state variable changes react re-renders its omponents. As soon as the list of restaurants updates,
  react will very quickly removes the past data and updates with the new data.
 
+ const arr=useState(reslist);     //array destructuring//useState is returning an array
+ const listOfRestaurants=arr[0];
+ const setListOfRestaurants=arr[1];
 
+  
+
+Reconciliation Algorithm(React Fibre)
+------------------------------------------
+
+Actual DOM              Virtual DOM is the representation of the actual DOM, it is nothing but an js object
+<div>
+  <div>
+    <h1/>
+  </div>
+</div>
+
+DIFF Algorithm
+-----------------
+
+It will actually cal the difference between the previous obj and the updated obj then it actuallys  changes the DOM and
+renders it at every render cycle. whenever there is a change in state variable there is a change in DOM and react re-renders.
+
+React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
 
