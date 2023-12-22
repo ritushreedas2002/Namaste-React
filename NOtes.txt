@@ -8,16 +8,16 @@ CDN :    "CDN" stands for Content Delivery Network. CDNs are networks of distrib
 that work together to deliver web content, such as images, stylesheets, JavaScript files, and other assets
 
 crossorigin: 
-1.Browser security rule preventing requests to different domains.
+1. Browser security rule preventing requests to different domains.
 2. to request the browser to fetch such resources 
-with CORS (Cross-Origin Resource Sharing) headers.(Mechanism allowing servers to specify resource access permissions.)
+with CORS (Cross-Origin Resource Sharing) headers. (Mechanism allowing servers to specify resource access permissions.)
 
-NOTE: order of the links should be maintained
+NOTE: The order of the links should be maintained
 -----
-LINK 1 :USE : Suitable for development environments with useful warnings and error messages for developers. 
+LINK 1: USE : Suitable for development environments with useful warnings and error messages for developers. 
 It includes extra checks and debugging information.
 
-LINK2 :USE :  Used in development environments along with React. It includes additional functionality related to 
+LINK2 : USE :  Used in development environments along with React. It includes additional functionality related to 
 rendering React components in the DOM.
 
 
@@ -26,33 +26,36 @@ rendering React components in the DOM.
 
 //React.createElement=>Object=>HTML
 
-npm install -D parcel  //-D dev dependency
-npm -package manager
+npm install -D parcel  //-D is a flag for dev dependency
+npm -package  
 dependency- The dependencies object specifies the packages that you need to run your code.
 
 
-dependency---1.dev dependency (in developement phase)   2.normal dependency (in developement phase + production phase)
-^-caret (automatic minor updates e.g. version 2.8.3 to 2.8.4)
-~tilde (major updates e.g. 2.8.3 to 3.0.0)
+dependency---1.dev dependency (in development phase)   2. normal dependency (in development phase + production phase)
+^-caret (automatic minor upgrades e.g. version 2.8.3 to 2.8.4)
+~-tilde (for major upgrades e.g. 2.8.3 to 3.0.0)
 
 
-package.json-mainly version of packages that the npm is handling (also the changes from minor to major) (configuration for our npm)
-package-lock.json- keeps a track of exact version of all the dependencies
+package.json - mainly the version of packages that the npm is handling (also the changes from minor to major) (configuration for our npm)
+package-lock.json - keeps track of the exact version of all the dependencies
 node modules-data base or collection of dependencies
 
 
 npm install parcel (beast)
-we need parcel->parcel depends on its other dependency-->known as transilitive dependencies
+we need parcel-->parcel depends on its other dependencies-->this nesting of dependencies is known as a transitive dependency
 
 
-.gitignore---not allowing those files to go to git repo
+.gitignore---blocks all those files mentioned in it from uploading into the git repo (contains all the files that I don't want to push into github)
+
+We should not put the node modules into the production (no need to upload them)
+that is why package.json and package-lock.json are necessary to be uploaded (because they maintain a note of all those dependencies our project needs), as they help in regenerating the required node modules for our project
+we just need to do "npm install" and it will recreate all those node modules for us
+
+npx parcel indexReact.html --will provide a server for our app
+npx - executing a package
 
 
-npx parcel indexReact.html --will provide a server to our app
-npx- executing a package
-
-
-cdn links not a prefereed way-as network costly operation and also react version control becomes difficult
+cdn links are not a preferred way-as network costly operation and also react version control becomes difficult
 
 
 Parcel--
