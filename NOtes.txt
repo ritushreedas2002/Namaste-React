@@ -55,8 +55,8 @@ npx parcel indexReact.html --will provide a server for our app
 npx - executing a package
 
 
-cdn links are not a preferred way-as network costly operation and also react version control becomes difficult
-
+cdn links are not a preferred way to bring React and ReactDOM into our project - as it is a network-costly operation and React version control becomes difficult
+"npm install" is same as "npm i"
 
 Parcel--
 Dev Build
