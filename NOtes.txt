@@ -263,3 +263,68 @@ renders it at every render cycle. whenever there is a change in state variable t
 
 React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
 
+--------------------------------------------------------------EPISODE 6--------------------------------------------------------------------------------
+
+Architecture---
+------------------
+
+1.MONOLITH Architecture (Suppose this is a JAVA PROJECT and we are doing everything in that project)
+
+----------------------
+| API   UI     AUTH   |  (JAVA PROJ)  (only writtern in java)
+| DB     SMS          |
+|---------------------|
+
+2.MICROSERVICES
+
+Different services for diff jobs    
+---------------------------|
+|                          |
+|  |API|     |UI|   |DB|   |(theses services are independent of each other and interacts in some use cases)
+|                          |     (ALl these small application are performed separately following separatio  of concerns (single responsibility principle))
+|   |AUTH|   |SMS|         |
+| ---------------- ------- |
+
+HOW do these services interact with each other?
+these services interact with each other through diff cases. They make call to diff microservices.
+Our react project comes into UI  microservices. ADVANTAGE: is that UI can be writtern in react, backend can be writtern in mongodb 
+so  mainly diff microservices can be writtern in different languages. They run in their own ports. eg UI:1234 , Backend:1022 and all these
+ports are mapped to their domain name.  
+
+
+TWO APPROACHES OF API CALL :
+---------------------------------
+1.
+LOADS --> API CALL(takes 500ms)-->Renders it in UI
+(as soon as the page loads we make an api call ,the api response and we render it )
+(poor user experience as we need to wait for 500ms)
+
+2.
+LOADS --> RENDERS -->API CALL --->RE-RENDERS
+(as soon as the page loads we render it then we make an api call ,the api response and we re-renders it )
+(Best approach)
+
+useEffect() hook 
+-------------------------
+it takes two arguments 1.callback function 2.dependency array
+As teh body loads it loads the whole body as the render cycle gets over, it calls its callback function.(useEffect gets called after the component
+has been rendered)
+
+eg.
+-----
+useEffect(()=>{
+  console.log("HII");
+},[]);
+ console.log("Ritu");
+
+ console
+ ----------
+ Ritu
+ HII
+
+CORS: mainly our browser or local host restricts the use of another host
+
+how to find api? : go to website ->inspect->network->click on fetch option->left side column api are given
+
+Suppose instead of showing Loading page while the api does response and re-renders we can show shimmer UI which is basically the shadow of the whole
+original UI.
