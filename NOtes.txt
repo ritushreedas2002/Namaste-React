@@ -331,3 +331,28 @@ how to find api? : go to website ->inspect->network->click on fetch option->left
 
 Suppose instead of showing Loading page while the api does response and re-renders we can show shimmer UI which is basically the shadow of the whole
 original UI.
+
+const [button,setbutton]=useState("Login");
+how const variable is changes?
+so when we setbutton actually react ensures to find the diff between the previous vitual DOM and the modified virtual DOM and then re-renders the 
+component once again, so again a new button variable is created with the modified value.
+
+const [searchtext, setsearchtext] = useState("");
+<input type='text' className='search-box' value={searchtext}></input>   
+to keep track of the input we need to bind it with the local state variable .
+NOTE: when at each keystroke the nothing shows in input text this is because .... the value is bind to seacrtext and the value is bind to input type
+so at at change the value still remain ""
+
+so we need to add onChange event handler :---that as the input changes we are changing the seachtext value
+at each key stroke the react component gets render again and again
+whenever a state variable updates,react tru=iggers a recoincilation cycle.
+
+NOTE:
+-------
+const [listOfRestaurants, setListOfRestaurants] = useState([]);
+const [filteredlistOfRestaurants, setfilteredListOfRestaurants] = useState([]);
+
+we are keeping intact the main list of restaurants that is listOfRestaurants and on every change we are manipulating filteredlistOfRestaurants
+so that the main list of restaurants keeps intact
+
+--------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
