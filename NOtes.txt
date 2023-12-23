@@ -95,11 +95,12 @@ you can create a production build in the following way-
 ** The Server then hosts the code to the end-user
 ** The copy of node-modules in the Local is different from the copy of node-modules in the Server
 
-inside package.json:-
+inside package.json we configure browserslist(this tells about all the systems our app is compatible with):-
 browserslist:[
-    "last 2 chrome versions"
-] //these are the versions where ur app will support
-
+    "last 2 Chrome versions",
+    "last 2 Firefox versions"
+] //the last 2 versions of Chrome and Firefox will definitely support our app
+* "last 2 versions" - this will cover the last 2 versions of all the systems
 
 -------------------------------------------------EPISODE 3--------------------------------------------------------------------------------
 
