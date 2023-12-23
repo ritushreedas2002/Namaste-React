@@ -45,7 +45,7 @@ npm install parcel (beast)
 we need parcel-->parcel depends on its other dependencies-->this nesting of dependencies is known as a transitive dependency
 
 
-.gitignore---blocks all those files mentioned in it from uploading into the git repo (contains all the files that I don't want to push into github)
+.gitignore---blocks all those files mentioned in it from uploading into the git repo (contains all the files that I don't want to push into GitHub)
 
 We should not put the node modules into the production (no need to upload them)
 that is why package.json and package-lock.json are necessary to be uploaded (because they maintain a note of all those dependencies our project needs), as they help in regenerating the required node modules for our project
@@ -56,23 +56,46 @@ npx - executing a package
 
 
 cdn links are not a preferred way to bring React and ReactDOM into our project - as it is a network-costly operation and React version control becomes difficult
-"npm install" is same as "npm i"
+"npm install" is the same as "npm i"
 
-Parcel--
-Dev Build
-Local server
-HMR-Hot Module Replacement (exchanges, adds, or removes modules while an application is running, without a full reload)
-caching 
-Image optimisation
-minification
+Features of Parcel--
+-creates a Dev Build for you
+-creates a Local server for you
+-does HMR = Hot Module Replacement (exchanges, adds, or removes modules while an application is running, without a full reload)
+-this HMR is done by File Watching Algorithm - written in C++
+-does Caching (in .parcel-cache folder)- which provides Faster Builds 
+-does Image optimization
+-does Minification which is essential for production build
+-does Bundling
+-does Compressing
+-does Consistent Hashing
+-does Code Splitting for you
+-gives Differential Bundling to our app (so that our app runs smoothly on older browser versions as well)
+-gives Diagnostics of our app
+-provides good error handling (better error suggestions)
+-HTTPS
+-does Tree Shaking Algorithm -  analyze the import, and export of each module, and remove everything that isn't used
+-different dev and prod bundles
 
+"npx parcel indexReact.html"
+when you write this, it generates a development build of your project and hosts it into port:1234 (which comes from the "dist" folder)
 
-npx parcel build indexReact.html
- //this will build bundle all the files are make a production ready file for the app
-//note:before writing that from package.json delete the main
+when we refresh the page or save files, it uses the ".parcel-cache" and "dist" folders to update the webpage using HMR
 
+The "dist" and the ".parcel-cache" folders can be automatically generated on each build, thus they are not required to be put into GitHub
 
-package.json
+you can create a production build in the following way-
+"npx parcel build indexReact.html"
+//this will build a bundle(or minify), and it will put all those files into a new folder i.e. "dist" folder (that are production-ready files for the app)
+//note: before writing this, from package.json delete the "main" key (else there may be a conflict)
+
+** Local project does not directly connect with the Server
+** Local pushes its code into the git (like package.json & package-lock.json is pushed and not the node-modules)
+** Server then fetches the code from the git (fetches the package.json & package-lock.json to create the node-modules)
+** The Server then hosts the code to the end-user
+** The copy of node-modules in the Local is different from the copy of node-modules in the Server
+
+inside package.json:-
 browserslist:[
     "last 2 chrome versions"
 ] //these are the versions where ur app will support
