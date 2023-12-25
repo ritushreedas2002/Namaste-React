@@ -104,16 +104,23 @@ browserslist:[
 
 -------------------------------------------------EPISODE 3--------------------------------------------------------------------------------
 
+we can configure the scripts in the package.json:-
+scripts are industry standards to shorten repetitive codes for starting/building our project
 "scripts": {
-    "start":"parcel indexReact.html",    [DEVELOPEMENT PHASE]
-    "build":"parcel build indexReact.html"
+    "start": "parcel indexReact.html",    [DEVELOPEMENT PHASE]
+    "build": "parcel build indexReact.html"
   },
-  npm run start or npm start
 
+we can use the scripts in the terminal as follows:-
+  npm run start or npm start are the same
+  but npm build will not work like this, you need to write npm run build
+
+** React.createElement => creates as Object => when we render this, the ReactDOM converts it into an HTMLElement and pushes it into the browser (and replaces everything from that DOM element if there was anything earlier)
 
   const parent1 = React.createElement("div", { id: "parent" },"HII")
-  is very difficult 
-  so JSX came into play --html and js merge into one file
+  it is very difficult to create elements like this
+  so JSX came into play -- a convention where HTML and JS are merged into one file  (JSX and React are not related to each other, e.g.- "JSX is a part of React" this statement is wrong)
+** JSX is not "HTML inside Javascript"
   jsx is html like syntax in js
   es6(EcmaScript) is the js engine understands   
   so parcel doing the whole thing that it tranpiled before it reaches js engine (this code is converted to the code that react can understand)
