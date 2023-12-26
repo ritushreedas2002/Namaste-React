@@ -118,13 +118,13 @@ we can use the scripts in the terminal as follows:-
 ** React.createElement => creates a ReactElement which is a JS Object => when we render this, the ReactDOM converts it into an HTMLElement and pushes it into the browser (and replaces everything from that DOM element if there was anything earlier)
 
  a. const parent1 = React.createElement("div", { id: "parent" },"HII")
-  it is very difficult to create elements like this
+  it isn't easy to create elements like this
   so JSX came into play -- a convention where HTML and JS are merged into one file  (JSX and React are not related to each other, e.g.- "JSX is a part of React" this statement is wrong)
 ** JSX is not "HTML inside Javascript"
    it is simply an "HTML-like syntax" or "XML-like syntax"
  b. const parent1 = <h1 id="parent"> HII </h1>;  //here parent1 is a React element
 a. is a React element created using React, b. is a React element created using JSX (both these are the same thing)
-b. is not a pure JavaScript, our browser does not understand JSX
+b. is not pure JavaScript, our browser does not understand JSX
   ES6(ECMAScript) is what the JS engine understands   
   so Parcel does the whole thing that is JSX is transpiled before it reaches the JS engine (this JSX is converted into the code that our browser or the React can understand)
     but Parcel is not doing the transpilation by itself, it is putting another package called Babel (another JS library, Babel is a JS compiler) into work for this purpose
@@ -133,28 +133,42 @@ Parcel is a manager of Babel
 During transpilation, internally the JSX is converted into a React.createElement done by Babel, and further methods are followed as usual
 
 const heading=<h1 id="heading" className="hello">hii everyone</h1>; //this is not HTML, in HTML the attribute is "class", whereas that same attribute in JSX is "className"
+** If you have to give an attribute in JSX, you have to write it in camelcase, in HTML we write tabindex="1" in JSX we write tabIndex="1"
 const  root=ReactDOM.createroot(document.getElementById("root"));
 root.render(heading);
 
-NOTE: jsx is not react-----jsx is making the code for opyimised and readable
------
+for multiline JSX code, you have to wrap it inside parentheses(), in order to help Babel understand where JSX is starting and ending
+const heading=(<h1 id="heading" className="hello">
+hii everyone
+</h1>);
 
 
-//components   //normal javascript function which returns some jsx element
-1.class based components -old way
-2.function Based components -new way
+//components   
+1. Class-based components - old way (uses JS classes)
+2. Functional components - new way (uses JS functions) //normal javascript function which returns some JSX element
+
+const h1 = ()=>{
+    return <h1 className="heading"> Namaste React Functional Component </h1>;
+};
+
+const h2 = ()=> <h1 className="heading"> Namaste React Functional Component </h1>;
+
+const h3 = ()=> (
+    <h1 className="heading"> Namaste React Functional Component </h1>
+);
+** h1,h2,h3 are the same React component
 
 //Component Composition
 component inside another Component
 
 
 //const data=api.getData();
-const Heading=()=>{
+const Heading = ()=>{
     return <div id="root">
         {data}   
         <h1>HII EVERYONE</h1>
-    </div>
-}
+    </div>;
+};
 
 cross-site scripting is the attack technique if js allows every one to access ur code 
 then it can steat ur local storage,cookies,read data
