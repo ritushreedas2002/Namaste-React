@@ -133,47 +133,68 @@ Parcel is a manager of Babel
 During transpilation, internally the JSX is converted into a React.createElement done by Babel, and further methods are followed as usual
 
 const heading=<h1 id="heading" className="hello">hii everyone</h1>; //this is not HTML, in HTML the attribute is "class", whereas that same attribute in JSX is "className"
-** If you have to give an attribute in JSX, you have to write it in camelcase, in HTML we write tabindex="1" in JSX we write tabIndex="1"
+** If you have to give an attribute in JSX, you have to write it in CamelCase, in HTML we write tabindex="1" in JSX we write tabIndex="1"
 const  root=ReactDOM.createroot(document.getElementById("root"));
 root.render(heading);
 
 for multiline JSX code, you have to wrap it inside parentheses(), in order to help Babel understand where JSX is starting and ending
-const heading=(<h1 id="heading" className="hello">
-hii everyone
-</h1>);
+const heading=(
+    <h1 id="heading" className="hello">
+        hii everyone
+    </h1>
+);
 
 
 //components   
 1. Class-based components - old way (uses JS classes)
 2. Functional components - new way (uses JS functions) //normal javascript function which returns some JSX element
 
-const h1 = ()=>{
+const head1 = ()=>{
     return <h1 className="heading"> Namaste React Functional Component </h1>;
 };
 
-const h2 = ()=> <h1 className="heading"> Namaste React Functional Component </h1>;
+const head2 = ()=> <h1 className="heading"> Namaste React Functional Component </h1>;
 
-const h3 = ()=> (
+const head3 = ()=> (
     <h1 className="heading"> Namaste React Functional Component </h1>
 );
-** h1,h2,h3 are the same React component
+** head1, head2, head3 are the same React component
 
-//Component Composition
-component inside another Component
+** You cannot render a functional component just like a React Element
+root.render(<head1/>); //this is how to render a functional component
 
-
-//const data=api.getData();
+//Component Composition - component inside another Component
 const Heading = ()=>{
     return <div id="root">
-        {data}   
+        <head1/>              // you can also write <head1></head1>  and also {head1()} -> this is like calling the head1() function
         <h1>HII EVERYONE</h1>
     </div>;
 };
 
-cross-site scripting is the attack technique if js allows every one to access ur code 
-then it can steat ur local storage,cookies,read data
+** You can also write normal JS functions to create functional components
 
-jsx takes care of injection, it this malicious api passes data to ur code jsx jst escapes it (sanitizing the data)
+const elem = <span>Hello Javascript code</span>; // consider elem as just a normal javascript variable
+const heading = (
+    <h1 id="heading" className="hello">
+        {elem}               //This is how you can put a React Element inside another React Element
+        hii everyone
+    </h1>
+);
+const num=1000;
+const data=api.getData();
+const Heading = ()=>{
+    return <div id="root">
+        {data}                // inside these curly braces you can write any JS code/expression inside JSX
+        <h2>{num}</h2>        // it will show 1000
+        {heading}             // you can also put React Elements inside a functional component like this
+        <h1>HII EVERYONE</h1>
+    </div>;
+};
+* You can also put functional components inside a React element, just like a component inside another component
+
+** Cross-site scripting is the attack technique that allows attacker to run JS code to access everything on your browser
+like they can steal ur local storage data, cookies, read data
+  *  JSX takes care of this injection, If the malicious API passes data to your code JSX just escapes it (sanitizing the data)
 
 -------------------------------------------------EPISODE 4--------------------------------------------------------------------------------
 
