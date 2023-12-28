@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "this id namaste",
   "scripts": {
-    "start":"parcel indexReact.html",
-    "build":"parcel build indexReact.html",
+    "start": "parcel indexReact.html",
+    "build": "parcel build indexReact.html",
     "test": "jest"
   },
   "repository": {
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/ritushreedas2002/Namaste-React#readme",
   "devDependencies": {
-    "parcel": "^2.10.3"
+    "parcel": "^2.10.3",
+    "process": "^0.11.10"
   },
   "dependencies": {
     "react": "^18.2.0",

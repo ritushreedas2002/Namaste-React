@@ -356,3 +356,227 @@ we are keeping intact the main list of restaurants that is listOfRestaurants and
 so that the main list of restaurants keeps intact
 
 --------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
+useEffect
+------------
+useEffect(()=>{})
+1. if no dependency, then useEffect will be called at every render of the component.
+2.useEffect(()=>{},[])if dependency is empty array, then useEffect will be called at first render of the component.
+3.useEffect(()=>{},[btnname])if dependency is not an empty array, then useEffect will be called when the btnanme variable gets updated
+
+
+useState
+-----------
+
+useState() is used to create local state variables inside your functional component
+NOTE: do not create state variables inside conditional statements or for loop or functions.
+------
+
+npm react-router-dom is installed to access the router facility to enhance the multi-page concept
+e.g if i write /about in url we will redirect to about us page
+
+createBrowserRouter creates an Router configuration
+--------------------- 
+createBrowserRouter([{},{}]) takes a list of object where each object is given it s path and the element to be rendered at that specific path.
+
+RouterProvider is used to provide the createBrowserRouter
+----------------
+import { createBrowserRouter,RouterProvider } from 'react-router-dom';
+const appRouter=createBrowserRouter([
+  {
+    path:"/",
+    element:<App/>
+  },
+  {
+    path:"/about",
+    element:<About/>
+  }
+])
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+ <RouterProvider route={appRouter}/>
+);
+
+
+Another approach:
+-------------------
+
+<Router>: This is a component from React Router that provides the routing context for your application. It must wrap the entire application to enable routing.
+
+<Routes>: This component is used to define the routes for your application. Inside it, you specify the different routes using the <Route> component.
+
+<Route path="/" element={<App />} />: This line defines a route for the root path ("/"). When the URL matches "/", it renders the <App /> component.
+ The element prop is used to specify the component to render for the given route.
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+ const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <Router>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  </Router>
+);
+
+
+now suppose i want my header component to be a constant :
+so 
+import { createBrowserRouter,RouterProvider,Outlet } from 'react-router-dom';
+const AppLayout =()=>{
+  return(
+    <div>
+      <Header/>
+      <Outlet/>
+    </div>
+  )
+}
+const appRouter=createBrowserRouter([
+  {
+    path:"/",
+    element:<AppLayout/>,
+    errorElement:<Error/>
+    children:[
+      {
+    path:"/about",
+    element:<About/>,
+    errorElement:<Error/>
+    },
+    {
+    path:"/contact",
+    element:<Contact/>,
+    errorElement:<Error/>
+    }
+  ]
+ }
+  
+])
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+ <RouterProvider route={appRouter}/>
+);
+
+now when path "/" is rendered the <AppLayout/> is rendered in place of <Outlet/>
+now when path "/about" is rendered the <About> is rendered in place of <Outlet/>
+so the header component remains intact and below that we add the outlet....
+
+by clicking on about it moves to about page using <a> anchor tag it reloads the whole page which is a bad practice so we use the <link> tag
+from react-router-dom. It is a wrapper of teh <a> tag
+
+Routing
+----------
+1.Client Side Routing -  we are not making any sort of network call, rather we are doing changing of components as about, contact 
+component already loaded in your local host.When we go to aboutus page it loads the about component
+
+2.Server Side Routing - When the local host, makes a network call fetches the data for AboutUS page and reloads the page.
+
+Dynamic Routing :
+where fr each restaurant another page will be created
+path="/restaurant/:resId" so this resId  is dynamic
+
+useParams from react-router-dom is used to find the id of the various dynamic routing.Params is a object with the unique id
+e.g-http://localhost:3000/restaurants/78511 ,useParams fetches the id :78511
+
+which further is used for dynamic routing
+
+Dynamic Routing:
+------------------
+Dynamic routing refers to the practice of generating routes dynamically based on certain parameters or data
+e.g:<Route path="/user/:userId" element={<UserProfile />} /> userId keeps chaging according to individual ids.
+
+
+--------------------------------------------------------------EPISODE 8------------------------------------------------------------------------
+
+CLASS BASED Component
+-------------------------
+
+ <UserClass name="Ritushree Das" location ="Address"/>
+ ALl the props u have passed will bind into a single object ...
+
+import React from "react";
+import "./User.css";
+class UserClass extends React.Component{
+    constructor(props){
+        super(props);        and then the obj will be passed to the Component
+    }
+
+    render(){
+        return <div className="User-card">
+            <div>NAME :{this.props.name}</div>
+            <div>Location:{this.props.location}</div>
+            <div>Contact Us:@ritz.das</div>
+        </div>
+    }
+}
+
+export default UserClass;
+
+----------NOTE: we can also write ------------------
+class UserClass extends React.Component {
+  render() {
+    return (
+      <div className="User-card">
+        <div>NAME: {this.props.name}</div>
+        <div>Location: {this.props.location}</div>
+        <div>Contact Us: @ritz.das</div>
+      </div>
+    );
+  }
+}
+
+export default UserClass;
+------------------------------------------------------------------------------------------------------------------
+
+creating state variable is always inside constructor
+---now when About.js is mounted/loaded in the web page it then goes through the jsx line by line and when it sees that the UserClass Component
+is called an instance of component or the component is initialised.
+
+LifeCycle
+-----------
+Parent Constructor-->Parent Render-->Child Constructor --->Child Render
+
+componentDidMount(){
+  console.log("HII MOUNT");
+}
+
+now first when UserClass is loaded the sequence of loading follows:
+1.Constructor
+2.render
+3.componentDidMount
+--------------------------------------------
+now suppose if About.js is a class based component --->calling--->UserClass which is also a class Based component
+Calling sequence---
+1.Parent Constructor
+2.Parent render
+    1.UserClass is called (Child)
+          1.child constructor
+          2.child render
+          3.child componentDidMount
+3.Parent componentDidMount
+------------------------------------------------
+LIFECYCLE 
+----------------
+2PHASES:
+1.render phase (is fast)
+in render phase --first constructor called then render method
+
+2.Commit phase (is slow)
+after all the updation in DOM through render phase then DidMount is called
+so DidMount is the place where API is called.
+
+-------------MOUNTING CYCLE---------------
+-Constructor(dummy data)
+-Render (dummy data)
+      <HTML dummy>
+componentDidMount
+      <API CALL>
+      this.setstae--->state variable updated
+
+----------UPDATING CYCLE------------
+-   render(API data)
+     <HTML (new api data)/>
+-componentDidUpdate
+--------------UNmounting cycle---------
+-componentWillUnmount
+       this will be called when we go to another page
