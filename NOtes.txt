@@ -45,7 +45,7 @@ npm install parcel (beast)
 we need parcel-->parcel depends on its other dependencies-->this nesting of dependencies is known as a transitive dependency
 
 
-.gitignore---blocks all those files mentioned in it from uploading into the git repo (contains all the files that I don't want to push into github)
+.gitignore---blocks all those files mentioned in it from uploading into the git repo (contains all the files that I don't want to push into GitHub)
 
 We should not put the node modules into the production (no need to upload them)
 that is why package.json and package-lock.json are necessary to be uploaded (because they maintain a note of all those dependencies our project needs), as they help in regenerating the required node modules for our project
@@ -56,76 +56,145 @@ npx - executing a package
 
 
 cdn links are not a preferred way to bring React and ReactDOM into our project - as it is a network-costly operation and React version control becomes difficult
-"npm install" is same as "npm i"
+"npm install" is the same as "npm i"
 
-Parcel--
-Dev Build
-Local server
-HMR-Hot Module Replacement (exchanges, adds, or removes modules while an application is running, without a full reload)
-caching 
-Image optimisation
-minification
+Features of Parcel--
+-creates a Dev Build for you
+-creates a Local server for you
+-does HMR = Hot Module Replacement (exchanges, adds, or removes modules while an application is running, without a full reload)
+-this HMR is done by File Watching Algorithm - written in C++
+-does Caching (in .parcel-cache folder)- which provides Faster Builds 
+-does Image optimization
+-does Minification which is essential for production build
+-does Bundling
+-does Compressing
+-does Consistent Hashing
+-does Code Splitting for you
+-gives Differential Bundling to our app (so that our app runs smoothly on older browser versions as well)
+-gives Diagnostics of our app
+-provides good error handling (better error suggestions)
+-HTTPS
+-does Tree Shaking Algorithm -  analyze the import, and export of each module, and remove everything that isn't used
+-different dev and prod bundles
 
+"npx parcel indexReact.html"
+when you write this, it generates a development build of your project and hosts it into port:1234 (which comes from the "dist" folder)
 
-npx parcel build indexReact.html
- //this will build bundle all the files are make a production ready file for the app
-//note:before writing that from package.json delete the main
+when we refresh the page or save files, it uses the ".parcel-cache" and "dist" folders to update the webpage using HMR
 
+The "dist" and the ".parcel-cache" folders can be automatically generated on each build, thus they are not required to be put into GitHub
 
-package.json
+you can create a production build in the following way-
+"npx parcel build indexReact.html"
+//this will build a bundle(or minify), and it will put all those files into a new folder i.e. "dist" folder (that are production-ready files for the app)
+//note: before writing this, from package.json delete the "main" key (else there may be a conflict)
+
+** Local project does not directly connect with the Server
+** Local pushes its code into the git (like package.json & package-lock.json is pushed and not the node-modules)
+** Server then fetches the code from the git (fetches the package.json & package-lock.json to create the node-modules)
+** The Server then hosts the code to the end-user
+** The copy of node-modules in the Local is different from the copy of node-modules in the Server
+
+inside package.json we configure browserslist(this tells about all the systems our app is compatible with):-
 browserslist:[
-    "last 2 chrome versions"
-] //these are the versions where ur app will support
-
+    "last 2 Chrome versions",
+    "last 2 Firefox versions"
+] //the last 2 versions of Chrome and Firefox will definitely support our app
+* "last 2 versions" - this will cover the last 2 versions of all the systems
 
 -------------------------------------------------EPISODE 3--------------------------------------------------------------------------------
 
+we can configure the scripts in the package.json:-
+scripts are industry standards to shorten repetitive codes for starting/building our project
 "scripts": {
-    "start":"parcel indexReact.html",    [DEVELOPEMENT PHASE]
-    "build":"parcel build indexReact.html"
+    "start": "parcel indexReact.html",    [DEVELOPEMENT PHASE]
+    "build": "parcel build indexReact.html"
   },
-  npm run start or npm start
 
+we can use the scripts in the terminal as follows:-
+  npm run start or npm start are the same
+  but npm build will not work like this, you need to write npm run build
 
-  const parent1 = React.createElement("div", { id: "parent" },"HII")
-  is very difficult 
-  so JSX came into play --html and js merge into one file
-  jsx is html like syntax in js
-  es6(EcmaScript) is the js engine understands   
-  so parcel doing the whole thing that it tranpiled before it reaches js engine (this code is converted to the code that react can understand)
+** React.createElement => creates a ReactElement which is a JS Object => when we render this, the ReactDOM converts it into an HTMLElement and pushes it into the browser (and replaces everything from that DOM element if there was anything earlier)
 
+ a. const parent1 = React.createElement("div", { id: "parent" },"HII")
+  it isn't easy to create elements like this
+  so JSX came into play -- a convention where HTML and JS are merged into one file  (JSX and React are not related to each other, e.g.- "JSX is a part of React" this statement is wrong)
+** JSX is not "HTML inside Javascript"
+   it is simply an "HTML-like syntax" or "XML-like syntax"
+ b. const parent1 = <h1 id="parent"> HII </h1>;  //here parent1 is a React element
+a. is a React element created using React, b. is a React element created using JSX (both these are the same thing)
+b. is not pure JavaScript, our browser does not understand JSX
+  ES6(ECMAScript) is what the JS engine understands   
+  so Parcel does the whole thing that is JSX is transpiled before it reaches the JS engine (this JSX is converted into the code that our browser or the React can understand)
+    but Parcel is not doing the transpilation by itself, it is putting another package called Babel (another JS library, Babel is a JS compiler) into work for this purpose
+Parcel is a manager of Babel
 
-const heading=<h1 id="heading" className="hello">hii everyone</h1>
-const  root=ReactDOM.createroot(document.getElementById("root));
+During transpilation, internally the JSX is converted into a React.createElement done by Babel, and further methods are followed as usual
+
+const heading=<h1 id="heading" className="hello">hii everyone</h1>; //this is not HTML, in HTML the attribute is "class", whereas that same attribute in JSX is "className"
+** If you have to give an attribute in JSX, you have to write it in CamelCase, in HTML we write tabindex="1" in JSX we write tabIndex="1"
+const  root=ReactDOM.createroot(document.getElementById("root"));
 root.render(heading);
 
-NOTE: jsx is not react-----jsx is making the code for opyimised and readable
------
+for multiline JSX code, you have to wrap it inside parentheses(), in order to help Babel understand where JSX is starting and ending
+const heading=(
+    <h1 id="heading" className="hello">
+        hii everyone
+    </h1>
+);
 
 
-babel package job to transpile  (js compiler) jsx code->React.createElemt--->js object--->HTML
+//components   
+1. Class-based components - old way (uses JS classes)
+2. Functional components - new way (uses JS functions) //normal javascript function which returns some JSX element
 
+const head1 = ()=>{
+    return <h1 className="heading"> Namaste React Functional Component </h1>;
+};
 
-//components   //normal javascript function which returns some jsx element
-1.class based components -old way
-2.function Based components -new way
+const head2 = ()=> <h1 className="heading"> Namaste React Functional Component </h1>;
 
-//Component Composition
-component inside another Component
+const head3 = ()=> (
+    <h1 className="heading"> Namaste React Functional Component </h1>
+);
+** head1, head2, head3 are the same React component
 
+** You cannot render a functional component just like a React Element
+root.render(<head1/>); //this is how to render a functional component
 
-//const data=api.getData();
-const Heading=()=>{
+//Component Composition - component inside another Component
+const Heading = ()=>{
     return <div id="root">
-        {data}   
+        <head1/>              // you can also write <head1></head1>  and also {head1()} -> this is like calling the head1() function
         <h1>HII EVERYONE</h1>
-    </div>
-}
+    </div>;
+};
 
-cross-site scripting is the attack technique if js allows every one to access ur code 
-then it can steat ur local storage,cookies,read data
+** You can also write normal JS functions to create functional components
 
-jsx takes care of injection, it this malicious api passes data to ur code jsx jst escapes it (sanitizing the data)
+const elem = <span>Hello Javascript code</span>; // consider elem as just a normal javascript variable
+const heading = (
+    <h1 id="heading" className="hello">
+        {elem}               //This is how you can put a React Element inside another React Element
+        hii everyone
+    </h1>
+);
+const num=1000;
+const data=api.getData();
+const Heading = ()=>{
+    return <div id="root">
+        {data}                // inside these curly braces you can write any JS code/expression inside JSX
+        <h2>{num}</h2>        // it will show 1000
+        {heading}             // you can also put React Elements inside a functional component like this
+        <h1>HII EVERYONE</h1>
+    </div>;
+};
+* You can also put functional components inside a React element, just like a component inside another component
+
+** Cross-site scripting is the attack technique that allows attacker to run JS code to access everything on your browser
+like they can steal ur local storage data, cookies, read data
+  *  JSX takes care of this injection, If the malicious API passes data to your code JSX just escapes it (sanitizing the data)
 
 -------------------------------------------------EPISODE 4--------------------------------------------------------------------------------
 
