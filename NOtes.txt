@@ -198,26 +198,26 @@ like they can steal ur local storage data, cookies, read data
 
 -------------------------------------------------EPISODE 4--------------------------------------------------------------------------------
 
-INLINE STYLING takes js object
+** For INLINE STYLING in JSX,it takes a JS object as an attribute
 --------------------------------------
 
 const stylecard={
     background-color:"yellow";
-}
+}                                   // this is a JS object
 
 const Body = () => {
   return (
     <div className='body'>
       <div className='search'>Search</div>
-      <div className='res-container' style={stylecard}>  //objects can be writtern within curly braces
-        <RestCard />
-      </div>
-    </div>
+      <div className='res-container' style={stylecard}>  //objects can be written within curly braces (JS code/expression are written within curly braces inside JSX)
+        <RestCard />                         |
+      </div>                                 |
+    </div>                           //INLINE STYLING in JSX
   );
 }
 
-<div className='res-container' style={{background-color:"yellow";}}>
-//first { } taking js and second { } is the js obj 
+<div className='res-container' style={{background-color:"yellow";}}>   // writing the JS object directly
+//first { } telling there is some piece of JS inside it and second { } is the JS obj itself
 
 ----REAL DATA is in JSON format----------
 
