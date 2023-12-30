@@ -649,3 +649,51 @@ componentDidMount
 --------------UNmounting cycle---------
 -componentWillUnmount
        this will be called when we go to another page
+
+----------------------------------------------------EPISODE 9---------------------------------------------------------------------------------
+
+
+CUSTOM HOOKS
+----------------
+A user created Hook which is a utility function.
+Naming convention:write the component starting with "use"
+
+Now to move offline go to inspect-->network-->then in drop down no throtting to offline
+
+----DYNMAIC BUNDLING--------
+Dynamic bundling or chunking, often referred to as code splitting, is a technique used in web development to improve the performance
+ and loading time of a web application. The idea is to split the JavaScript code into smaller "chunks" or "bundles" and load them on-demand, 
+ instead of loading the entire JavaScript code at once. This is particularly useful for large-scale applications where the initial download size
+  can be substantial.
+
+  -----LAZY LOADING/(ON-demand Loading)----------
+  Lazy loading is a technique used in web development to defer the loading of certain assets (such as images, scripts, or stylesheets) until they are
+   actually needed.
+   when our app loads the grocery does not loads, when we go to grocery at that point it loads
+   -----Lazy() is a named export given by react
+    -It takes a callback function calling import() function and inside import function taking the path of the grocery
+    so making grocery having its own bundle and and the main bundle is different(app.js)
+   ----Suspense------
+    <Suspense fallback={<Shimmer />}><Grocery /></Suspense>
+    Suspense is writtern as without it an error occurs as when our app loads it trys t load Grocery but cannot so we need to write suspense fallback 
+    whick shows what to be loaded in absence of Grocery
+
+
+------------------------------------------------------EPISODE 10---------------------------------------------------------------------------------
+Other ways of writing css--
+1.sass 2.scss 3.styled component
+---------LIB-----------------------
+MAterialUI library (in react)
+ChakraUI 
+Bootstrap
+ant design
+----------------------------------
+Tailwind css works with various frameworks,normal HTML..and so on
+Taiwind css usus postcss behind the scene .(Postcss is a tool for transforming js to css)
+
+npx tailwindcss init -----it will create a taiwind.config.js
+content: [
+    "./src/*/.{js,jsx,ts,tsx}",
+  ],
+  telling tailwind can be used in js file,jsx file ans so on
+  in tailwind, everything happens related to class name
