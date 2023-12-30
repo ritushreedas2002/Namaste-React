@@ -697,3 +697,12 @@ content: [
   ],
   telling tailwind can be used in js file,jsx file ans so on
   in tailwind, everything happens related to class name
+
+Dynamic classes in tailwing w-[200px]
+  Disadvantage of taiwindcss-
+  1. it makes the code look ugly
+  2. it becomes messy to handle 
+
+  Advantages--
+  1.t is very light-weight 
+  as if we write 10 times m-4 it jst take it as once
