@@ -219,6 +219,53 @@ const Body = () => {
 <div className='res-container' style={{background-color:"yellow";}}>   // writing the JS object directly
 //first { } telling there is some piece of JS inside it and second { } is the JS obj itself
 
+** Passing a Prop to a component is just like passing an argument to a function
+** React wraps up all the props together and passes them as an object to the required functional component
+** When you have to dynamically pass in some data to a component, you pass in as a prop
+** You can pass any no. of props you wish to, React will wrap them into an object
+
+const RestaurantCard = (props) =>{
+    return (
+        <div className="res-card">
+            <h3>{props.resName}</h3>
+            <h4>{props.cuisine}</h4>
+        </div>
+    );
+};
+
+const Body = () =>{
+    return (
+        <div className="res-container">
+            <RestaurantCard resName="Meghna Foods" cuisine="Indian"/>
+            <RestaurantCard resName="KFC" cuisine="Burger"/>
+            <RestaurantCard resName="Tabdoor's" cuisine="Arabic"/>
+        </div>
+    );
+};
+
+** You can also de-structure(JS concept) the object on the fly
+
+const RestaurantCard = ({resName,cuisine}) =>{
+    return (
+        <div className="res-card">
+            <h3>{resName}</h3>
+            <h4>{cuisine}</h4>
+        </div>
+    );
+};
+
+OR
+
+const RestaurantCard = (props) =>{
+    const {resName,cuisine} = props;
+    return (
+        <div className="res-card">
+            <h3>{resName}</h3>
+            <h4>{cuisine}</h4>
+        </div>
+    );
+};
+
 ----REAL DATA is in JSON format----------
 
 Conflict driven UI-open swiggy ->offers available in benguluru,kol all are different
