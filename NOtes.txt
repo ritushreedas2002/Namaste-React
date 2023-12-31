@@ -268,10 +268,11 @@ const RestaurantCard = (props) =>{
 
 ----REAL DATA is in JSON format----------
 
-Conflict driven UI-open swiggy ->offers available in benguluru,kol all are different
-so for not building diff UI for different places
+** Config-driven UI -> opens swiggy with offers available in Bengaluru, Kolkata all are different
+** Config-driven UI means your UI is driven by a particular configuration based upon certain conditions
+It is necessary for not building diff UI for different places
 
-Conflict comes from backend
+Config comes from backend
 ---------------JSON------------------
 {
 "employee": {
@@ -284,25 +285,31 @@ Conflict comes from backend
 
 swiggy api:https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING
 
-DURING USING MAP:
---------------------
-we need to write key to uniquely identify the elements:
+** const {cloudinaryImageId, name, avgRating, cuisines, costForTwo, deliveryTime} = resData?.data;  // this question mark(?) is called optional chaining
 
-                  CONTAINER  
-  ---------------------------------------                     
+** DURING USING MAP:
+--------------------
+we need to write a key to uniquely identify the elements:-> Each child in a list should have a unique "key" prop. "key" is a reserved keyword.
+
+                CONTAINER (root) 
+     ----------------------------------                   
      |               |                |
 1.component1    2.component2    3.component3
-suppose you want to insert a component before component1 this is where key is important
-key is also important as it will not re-render everything again,
+suppose you want to insert a component before component0 in the first place, this is where the key is important
+key is also important as because of it, React will know which component is new, and it will not re-render everything again, otherwise, React won't know which component came at which position, and it will clean the container, and re-render everything (as it considers all the components as same)
 
-When React renders a list of elements, it needs a way to uniquely identify each item in the list. The key prop provides 
+When React renders a list of elements, it needs a way to identify each item in the list uniquely. The key prop provides 
 a hint to React about the identity of each element. This is especially important when the list can dynamically change, such as 
 when items are added or removed.
+
+** Keys optimize our code heavily (big performance enhancement)
 
 data.map((rest,index) => (
     <ResCard key={index} data={rest} />   //key is to identify each card as unique
 ))
-//INDEX is not recommended by React itself
+//INDEX is not recommended by React itself to be used as keys
+
+// not using keys (not acceptable) <<<< index as key <<<<<<<< unique id (best practice)
 
 -------------------------------------------------EPISODE 5--------------------------------------------------------------------------------
 src folder-has the source code
