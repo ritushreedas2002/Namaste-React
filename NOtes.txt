@@ -760,3 +760,77 @@ Dynamic classes in tailwing w-[200px]
   Advantages--
   1.t is very light-weight 
   as if we write 10 times m-4 it jst take it as once
+
+
+  -------------------------------------------------EPISODE 11---------------------------------------------------------------------------------
+
+  HIGHER ORDER COMPONENT--a function that returns another function
+
+  it basically used for enhancement suppose in the body component we want some cards to be labelled as promoted by our app.
+  NOTE: as promoted not in the API so making every rescard id which is divisible by 5 as promoted.... 
+
+
+
+  ----UI APPLICATION-----
+  1.UI LAYER
+  2.DATA LAYER
+
+  UI LAYER GETS POWERED BY DATA LAYERED
+  (Data layer consits of props,state variables ...etc) (/Major thing is to handle data layer/)
+
+  FILTER----out all the item categories and enhance the individual restaurant menu
+  @ is not supported so we need to write ["@type"] or [@type]
+  The format of the categories (UI) is called ---"Acordian
+
+  ----REACT DEVELOPER TOOLS-----
+  featues----
+  1.Components
+        it shows the component hierarchy of the system
+  2.PROFILER
+        it mainly records ur actions and after stop recording it shows the components invoked
+  
+  -----------CONTROLLED AND UNCONTROLLED Components--------LIFTING THE DATA-------------
+    RestaurantMenu is controlling the Restaurant Category as for suppose there are 4 categories and suppose if we expand recommended category all 
+    other categories must collapse.
+
+    This is called lifting the data as the control is on the hands of the parent not in the child
+
+    UNCONTROLLED---when restaurant category has its own state 
+
+    CONTROLLED COMPONENT FULL EXPLANATION 
+    -------------------------------------------
+    RestaurantMenu.js(PARENT)
+    -----------------------------
+
+    const [showIndex,setShowIndex]=useState(0);
+     {categories.map((category,index)=>(
+                <RestaurantCategory key={category?.card?.card.title} 
+                data={category?.card?.card} 
+                showItems={index===showIndex?true:false}      //we are setting which category items to be showed 
+                setShowIndex={()=>setShowIndex(index)}/>      
+     ))}
+     By default category 0 is always showed with their items as showIndex initially 0.
+    showIndex is controlling which category to showed if category 0 is opened automatically other categories get closed 
+    on clicking on other categories the setShowIndex function is called which returns set the showIndex with its index value then
+    showItems gets equal to the actual index value and the index of the category  clicked which changes that particularly
+    category to true which means that category will show its items and other will not show their items
+
+
+    RestaurantCategory.js (CHILD)
+    -------------------------------------
+
+    const RestaurantCategory=({data,showItems,setShowIndex})=>{
+        const handleClick=()=>{
+          setShowIndex();
+      }
+      return (
+        <div>
+            <div className="flex justify-between cursor-pointer "onClick={handleClick}>
+            {showItems&&<ItemList items={data.itemCards}/>}
+        </div>
+    )
+ }
+
+ Basically what happens on cLick of category it calls the setShowIndex() function which modifies the parent RestaurantMenu 
+
+ LIFTING THE STATE UP ---PARENT CONTROLLING ITS CHILDREN
