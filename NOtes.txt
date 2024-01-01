@@ -312,23 +312,32 @@ data.map((rest,index) => (
 // not using keys (not acceptable) <<<< index as key <<<<<<<< unique id (best practice)
 
 -------------------------------------------------EPISODE 5--------------------------------------------------------------------------------
-src folder-has the source code
-in src folder
+src folder has the source code
 
-ALL hard coded data like links and dummy data are placed in another folder called utils
+** keep all your components in the 'components' folder
+
+** It is better to always name the file the same as the component it contains, like the Header component in the Header.js file
+** Before you can import a component, you have to export that component from the file it resides in
+
+import Header from "./components/Header"; is the same as import Header from "./components/Header.js"; or import Header from "./components/Header.jsx"; based upon what extension you give to your file because React will treat it as a JS file by itself
+
+** ALL hard-coded data like links and dummy data are placed in another folder called 'utils' or 'common' or 'config' and not in the 'components' folder
+you can keep your constant links in the constant.js file (small c denotes it is not a component)
 
 Types of EXPORT/IMPORT 
-1.default (Components)
--------export default (name)
---------import (name) from './filename'
+1. Default (Components)
+--------export default component_name;
+--------import component_name from './path_name';
+** In one file, you can only have one default export
 
-2.Named (multiple exports)
---------export const name=
---------export const name2=
---------import {name} from './filename'
+2. Named (for multiple exports)
+--------export const constant_name = // write the constant value
+--------export const constant_name2 = // write the constant value
+--------import {name} from './path_name';
+** A good practice is to keep default export for components, but you can do named export for components also
 
+Default export can be done with the named export in this format:---------------
 
-Default export can be done with the named export in thsi format:---------------
 // Named export
 export const myFunction = () => {
   // ... function implementation
@@ -338,21 +347,22 @@ export const myFunction = () => {
 const MyComponent = () => {
   // ... component implementation
 };
-
 export default MyComponent;
 
-onClick takes a call back function 
+onClick takes a call-back function 
 ----------
-onClick{()=>{}}
-
+<button className="filter-btn" onClick={()=>{}}>Top Rated Restaurants</button>  
+/*button has an onClick attribute, which takes in a callback function(this is the function that will be called on click) */
 
 REACT HOOKS  (//import from react as a named import)
+===========
+NOTE: when we change a normal variable it does not affect the UI so we use the Hooks.
+Hooks are normal JS functions given by React that have superpowers used for DOM manipulation
+These are the utility functions given by React. The two important hooks are : useState() and useEffect()
 
-NOTE:when we change a normal variable it does not affect the UI so we use the hooks
-are normal js function given by react which have super powers used for DOM manipulation
-these are the utility function given by react.The two imp hooks are :useState() and useEffect()
-
-useState()-basically gives u super power react variable  keeps sync of data layer and UI layer
+useState() - basically gives u a superpowerful React variable that keeps sync of the data layer and UI layer
+** import { useState } from "react";
+useState() is used to create a State variable
 const [listOfRestaurants, setListOfRestaurants] = useState(reslist);
            |                     |                         |
         default            what to be placed           default value[array of objects]
