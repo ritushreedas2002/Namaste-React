@@ -360,31 +360,40 @@ NOTE: when we change a normal variable it does not affect the UI so we use the H
 Hooks are normal JS functions given by React that have superpowers used for DOM manipulation
 These are the utility functions given by React. The two important hooks are : useState() and useEffect()
 
-useState() - basically gives u a superpowerful React variable that keeps sync of the data layer and UI layer
+useState() - gives you a superpowerful React variable that keeps sync of the data layer and UI layer
 ** import { useState } from "react";
-useState() is used to create a State variable
+useState() is used to create a State variable (it maintains the state of your component)
+whenever you call the useState() function, it gives a state variable, which you must receive.
+const [listOfRestaurants] = useState([]); // listOfRestaurants receives the array returned by useState(), whatever we pass inside useState() becomes the default value of the State variable, [] (empty list) in this case
+
 const [listOfRestaurants, setListOfRestaurants] = useState(reslist);
-           |                     |                         |
-        default            what to be placed           default value[array of objects]
-                           when an event occurs
+           |                       |                           |
+     main variable          what to be placed           default value[array of objects]
+                           when an event occurs          of main var
+                    (preferred convention to add set
+                      before the main variable name)
+                    ** Updates the main variable, and
+                      reflects the changes in the UI
 
 setListOfRestaurants(filteredList);
-means that listOfRestaurants=filteredList; after onCLick eventListerner
+means that listOfRestaurants = filteredList; after onCLick eventListener
 
-this will filter out those restaurants having rating more than 4 and sets the listOfRestaurants
-This is called re-rendering. When a state variable changes react re-renders its omponents. As soon as the list of restaurants updates,
- react will very quickly removes the past data and updates with the new data.
+this will filter out those restaurants having a rating of more than 4 and sets the listOfRestaurants to filteredList
+This is called re-rendering. When a state variable changes react re-renders its components. As soon as the list of restaurants updates,
+React will very quickly remove the past data and update the UI with the new data.
+The logic of re-rendering is basically updating the UI
 
- const arr=useState(reslist);     //array destructuring//useState is returning an array
- const listOfRestaurants=arr[0];
- const setListOfRestaurants=arr[1];
+ const arr = useState(resList);     //array destructuring //useState is returning an array
 
-  
+ const [listOfRestaurants, setListOfRestaurants] = arr;
+OR
+ const listOfRestaurants = arr[0];
+ const setListOfRestaurants = arr[1];
 
-Reconciliation Algorithm(React Fibre)
-------------------------------------------
+Reconciliation Algorithm(also known as React Fibre)
+---------------------------------------------------
 
-Actual DOM              Virtual DOM is the representation of the actual DOM, it is nothing but an js object
+Actual DOM (only code)             Virtual DOM is the representation of the actual DOM, it is nothing but the JS object
 <div>
   <div>
     <h1/>
@@ -394,10 +403,11 @@ Actual DOM              Virtual DOM is the representation of the actual DOM, it 
 DIFF Algorithm
 -----------------
 
-It will actually cal the difference between the previous obj and the updated obj then it actuallys  changes the DOM and
-renders it at every render cycle. whenever there is a change in state variable there is a change in DOM and react re-renders.
+It will calculate the difference between the previous obj and the updated obj then it changes(updates) the DOM and renders it at every render cycle. 
+Whenever there is a change in state variable there is a change in DOM and react re-renders.
 
 React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
+** Finding out the difference between two HTML code is tough, Finding out the difference between two object(virtual DOM) is fast
 
 --------------------------------------------------------------EPISODE 6--------------------------------------------------------------------------------
 
