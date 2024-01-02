@@ -390,6 +390,10 @@ OR
  const listOfRestaurants = arr[0];
  const setListOfRestaurants = arr[1];
 
+** In the "const" data type we cannot change the value, but how is it possible?
+When we update the value by assigning a new value to setListOfRestaurants then the useState() actually rerenders the whole component 
+so a new value is assigned to listOfRestaurants.
+
 Reconciliation Algorithm(also known as React Fibre)
 ---------------------------------------------------
 
@@ -854,3 +858,82 @@ Dynamic classes in tailwing w-[200px]
  Basically what happens on cLick of category it calls the setShowIndex() function which modifies the parent RestaurantMenu 
 
  LIFTING THE STATE UP ---PARENT CONTROLLING ITS CHILDREN
+
+----------PROPS DRILLING--------------
+ IN REACT,passing data through components is a tough work. So data flow is a one way. parent->children->children
+ root->children->children->ans so on
+ Now suppose I want to pass the data to the last children so we need to move the data between its intermediate parents.
+
+ In that case we useContext  so that we can pass the data directly.
+ Because COntext is an approach like a global data is placed and any one can access it when needed. 
+ eg-logged in user info, or the theme (light or dark theme)
+
+ createContext used for making a global data.
+ useContext used for using the global data.
+ const data=useContext(useContext);
+
+
+ In class based components
+ <userContext.Consumer>
+ {(data)=>console.log(data)}       it takes a callback function which take data that the global data
+ </userContext.Consumer>
+
+ or more destructuring---
+ <userContext.Consumer>
+ {({loggedInUser})=>console.log(loggedInUser)}       it takes a callback function which take data that the global data
+ </userContext.Consumer>
+
+ ------To modify the data and make the data accesible to all the other components we use userContext.Provider ------
+  const [userName,setUserName]=useState();
+  useEffect=(()=>{
+   //API CALL;
+   const data={
+    name="Akshay Saini"
+   }
+   setUserName(data.name);
+  },[])
+ <UserContext.Provider value={{userLoggedin:userName}}>
+ <header/>
+ <outlet/>
+ </UserContext.Provider value={{userLoggedin:userName}}>
+
+Header component and other components inside the Provider can access the modified value;
+NOTE: it is very powerful as we can apply provider to somecomponents or the whole app.
+
+------------------------------------------------------------------------------
+const [username,setusername]=useState();
+<UserContext.Provider value={{ loggedInUser:username,setusername }}>   //we can pass setusername so that we can access it anywhere
+      <Router>
+        <Header />
+        <Routes>
+        .
+        .
+        .
+
+Body.js
+--------
+
+const {loggedInUser,setusername}=useContext(UserContext);
+<input className='border border-black p-2 ' value={loggedInUser} onChange={(e)=>setusername(e.target.value)}></input>
+so  now on every change of key stroke the loggedInUser changes.
+
+-----------------------------------------------------------------------
+usecontext and Redux Toolkit Different
+===============================================
+redux is more scalable 
+in useContext we need to make diff context for different types of data.
+
+State Management:
+
+useContext:
+------------
+Primarily designed for managing local component state or sharing state between a few closely related components.
+State is managed within the component or a few related components.
+
+Redux:
+------
+Designed for managing a global state that can be accessed by any component in the application.
+State is stored centrally in a Redux store, and components can subscribe to changes in the state.
+
+
+-------------------------------------------------------------------EPISODE 12------------------------------------------------------------------
