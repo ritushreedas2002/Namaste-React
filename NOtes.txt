@@ -952,3 +952,84 @@ State is stored centrally in a Redux store, and components can subscribe to chan
 
 
 -------------------------------------------------------------------EPISODE 12------------------------------------------------------------------
+
+-------------------REDUX----------------------------------------
+--------Works in the data Layer-----------------------
+NOTE:REDUX AND REACT ARE DIFF LIB.
+REDUX is a lib used for managing state. (Another lib is zustand)
+Application becomes easier for debugging
+              TWO LIB
+                 |
+        -  - - -----------
+        |                 |
+        React-Redux     Redux-Toolkit(packages are intended to be 
+                                        the standard way of writing redux logic)
+
+VANILLA REDUX IS THE OLDER REDUX(WHICH SAYS DON'T MUTATE STATE)
+--------REDUX STORE---------
+we can keep all the data in our redux store but slice wise .Slices can be (one is cart data slice),(other is loggedin user slice)
+
+CART button  (Click) ----->Dispatches an action---->calls a function---->which internally modifies the cart(slice)(updates the slice)
+-------------
+What is the function?
+this is called as reducer function.
+
+Now how to read data from the cart slice in the redux store??
+--------->from cart slice---->|Selector|----------->that reads the data ------->modifies the cart component.
+                |SELECTOR|------>(phenomenon is called subscribing to the store)(our header component have subscribed the store)
+npm i @redux/toolkit 
+npm i react-redux
+
+-Build a store         ----configureStore()
+-Connect the store to our app  ----------------<Provider store={}> 
+-Cart (cartSlice)          ---------------------createSlice
+-dispatch(Action)                 ---------------------reducers
+-Selector     ----is nothing but a react hook ----useSelector
+
+const handleItems=(items)=>{
+
+}
+onClick={()=>handleItems(items)}//correct way
+onClick={handleItems(items)}//NOT correct as we do not want to immediate call a function but call it when clicked
+
+-----------------------------------
+const cartItems=useSelector((store)=>store.cart.items);//from the store we are only subscribing to a slice
+
+or
+const store=useSelector((store)=>store)//subscribe to the whole store
+const cartItems=store.cart.items;
+
+note: not an effictive one as we donnot need any sort of update for other slice rather than cart SLice
+-----------------------------------------
+
+in appstore the slices are kept in 
+reducer:{
+  cart:cartReducer
+}
+
+in cartSlice 
+the reducer functions are kept in
+reducers:{
+  //mutating state directly, donot have to return and redux uses immer behind the scenes
+  addItem:(state,action)=>{     //state is a local var having value of initialState
+
+      state=["akhshay"]     //not mutating jst adding a another reference to the state
+
+      state.items.push()     //mutating the state
+  }
+}
+
+but we export the cartSlice.reducer;
+
+reducers:{
+  clearCart:(state,action)=>{ 
+
+    //in redux we cannot do simply console log--we need to use current
+    state=[];
+    console.log(current(state));
+    //either update the existing state or return the new state
+      state.items.length===0;
+  -------OR----------
+      return {items:[]}
+  }
+}
