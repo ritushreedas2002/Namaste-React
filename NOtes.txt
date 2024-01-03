@@ -333,7 +333,7 @@ Types of EXPORT/IMPORT
 2. Named (for multiple exports)
 --------export const constant_name = // write the constant value
 --------export const constant_name2 = // write the constant value
---------import {name} from './path_name';
+--------import {name, name2} from './path_name';
 ** A good practice is to keep default export for components, but you can do named export for components also
 
 Default export can be done with the named export in this format:---------------
@@ -357,7 +357,7 @@ onClick takes a call-back function
 REACT HOOKS  (//import from react as a named import)
 ===========
 NOTE: when we change a normal variable it does not affect the UI so we use the Hooks.
-Hooks are normal JS functions given by React that have superpowers used for DOM manipulation
+Hooks are normal JS functions given by React for specific use cases. They have superpowers used for DOM manipulation
 These are the utility functions given by React. The two important hooks are : useState() and useEffect()
 
 useState() - gives you a superpowerful React variable that keeps sync of the data layer and UI layer
@@ -390,6 +390,8 @@ OR
  const listOfRestaurants = arr[0];
  const setListOfRestaurants = arr[1];
 
+** useState() always returns an array of 2 parameters, first is the initial value assigned to a variable, second is the setter function used to change/update the original variable
+
 ** In the "const" data type we cannot change the value, but how is it possible?
 When we update the value by assigning a new value to setListOfRestaurants then the useState() actually rerenders the whole component 
 so a new value is assigned to listOfRestaurants.
@@ -411,34 +413,34 @@ It will calculate the difference between the previous obj and the updated obj th
 Whenever there is a change in state variable there is a change in DOM and react re-renders.
 
 React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
-** Finding out the difference between two HTML code is tough, Finding out the difference between two object(virtual DOM) is fast
+** Finding out the difference between two HTML codes is tough, Finding out the difference between two objects (virtual DOM) is fast
 
 --------------------------------------------------------------EPISODE 6--------------------------------------------------------------------------------
 
 Architecture---
 ------------------
 
-1.MONOLITH Architecture (Suppose this is a JAVA PROJECT and we are doing everything in that project)
+1. MONOLITH Architecture (Suppose this is a JAVA PROJECT and we are doing everything in that project)
 
-----------------------
-| API   UI     AUTH   |  (JAVA PROJ)  (only writtern in java)
+|---------------------|
+| API   UI     AUTH   |  (JAVA PROJ)  (only written in Java)
 | DB     SMS          |
 |---------------------|
 
-2.MICROSERVICES
+2. MICROSERVICES
 
-Different services for diff jobs    
----------------------------|
+Different services for different jobs    
+|--------------------------|
 |                          |
 |  |API|     |UI|   |DB|   |(theses services are independent of each other and interacts in some use cases)
-|                          |     (ALl these small application are performed separately following separatio  of concerns (single responsibility principle))
+|                          |     (All these small applications are performed separately following the separation of concerns (single responsibility principle))
 |   |AUTH|   |SMS|         |
-| ---------------- ------- |
+|--------------------------|
 
-HOW do these services interact with each other?
-these services interact with each other through diff cases. They make call to diff microservices.
-Our react project comes into UI  microservices. ADVANTAGE: is that UI can be writtern in react, backend can be writtern in mongodb 
-so  mainly diff microservices can be writtern in different languages. They run in their own ports. eg UI:1234 , Backend:1022 and all these
+How do these services interact with each other?
+these services interact with each other through different cases. They make calls to different microservices.
+Our react project comes into UI  microservices. ADVANTAGE: is that UI can be written in react, backend can be written in Mongodb 
+so  mainly different microservices can be written in different languages. They run in their own ports. eg UI:1234, Backend:1022, and all these
 ports are mapped to their domain name.  
 
 
@@ -446,43 +448,49 @@ TWO APPROACHES OF API CALL :
 ---------------------------------
 1.
 LOADS --> API CALL(takes 500ms)-->Renders it in UI
-(as soon as the page loads we make an api call ,the api response and we render it )
+(as soon as the page loads we make an API call, the API response and we render it )
 (poor user experience as we need to wait for 500ms)
 
 2.
 LOADS --> RENDERS -->API CALL --->RE-RENDERS
-(as soon as the page loads we render it then we make an api call ,the api response and we re-renders it )
+(as soon as the page loads we render it then we make an API call, the API response and we re-render it )
 (Best approach)
 
 useEffect() hook 
 -------------------------
-it takes two arguments 1.callback function 2.dependency array
-As teh body loads it loads the whole body as the render cycle gets over, it calls its callback function.(useEffect gets called after the component
-has been rendered)
+it takes two arguments:- 1. callback function 2. dependency array
+After the whole component loads, and the render cycle is over, it calls its callback function. 
+(useEffect's callback function gets called after the component has been rendered, as soon as the render cycle has finished)
 
 eg.
 -----
 useEffect(()=>{
-  console.log("HII");
+  console.log("HII");   // this will be called after the whole Body component's render cycle has finished
 },[]);
- console.log("Ritu");
+ console.log("Ritu");   // this will be called during rendering Body component 
 
  console
  ----------
  Ritu
  HII
 
-CORS: mainly our browser or local host restricts the use of another host
+const fetchData = async () => {
+    const data = await fetch( "API" );     // this fetch() is provided to us by the browser or the JS engine,  it fetches data from the API, and this fetch() will return a promise
+    const json = await data.json();
+};
+//You can handle a promise by either using .then - .catch or by using async - await(modern approach)
 
-how to find api? : go to website ->inspect->network->click on fetch option->left side column api are given
+CORS policy: mainly our browser is not allowing us to call Swiggy's API from the local host, it restricts the calling of an API from one origin to another origin
 
-Suppose instead of showing Loading page while the api does response and re-renders we can show shimmer UI which is basically the shadow of the whole
-original UI.
+how to find API? : go to website ->inspect->network->click on fetch option->left side column API are given
+
+Suppose instead of showing the Loading page while the API does response and re-renders we can show a spinning loader or shimmer UI which is the shadow of the whole original UI.
 
 const [button,setbutton]=useState("Login");
-how const variable is changes?
-so when we setbutton actually react ensures to find the diff between the previous vitual DOM and the modified virtual DOM and then re-renders the 
+how the const variable is changed?
+so when we click "Login", setbutton function executes, and React ensures to find the difference between the previous virtual DOM and the modified virtual DOM and then re-renders the 
 component once again, so again a new button variable is created with the modified value.
+** And this is why we need a State variable because a normal variable would only change its value without affecting the UI, but for a State variable, the data layer and the UI layer are closely connected, thus reflecting the changes in sync with one another.
 
 const [searchtext, setsearchtext] = useState("");
 <input type='text' className='search-box' value={searchtext}></input>   
