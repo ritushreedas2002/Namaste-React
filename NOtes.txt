@@ -513,8 +513,9 @@ NOTE:
 const [listOfRestaurants, setListOfRestaurants] = useState([]);
 const [filteredlistOfRestaurants, setfilteredListOfRestaurants] = useState([]);
 
-we are keeping intact the main list of restaurants that is listOfRestaurants and on every change we are manipulating filteredlistOfRestaurants
-so that the main list of restaurants keeps intact
+we are keeping intact the main list of restaurants, that is, listOfRestaurants, and on every change, we are manipulating filteredlistOfRestaurants
+so that the main list of restaurants remains intact otherwise if our main list gets updated, then for all the following searches after that, it will search only within the updated list, and not the original list
+this way we never update our original list of restaurants, i.e., listOfRestaurants, except for the first time, while fetching data from the API
 
 --------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
 useEffect
