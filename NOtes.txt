@@ -518,23 +518,20 @@ so that the main list of restaurants remains intact otherwise if our main list g
 this way we never update our original list of restaurants, i.e., listOfRestaurants, except for the first time, while fetching data from the API
 
 --------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
+
 useEffect
 ------------
-useEffect(()=>{})
-1. if no dependency, then useEffect will be called at every render of the component.
-2.useEffect(()=>{},[])if dependency is empty array, then useEffect will be called at first render of the component.
-3.useEffect(()=>{},[btnname])if dependency is not an empty array, then useEffect will be called when the btnanme variable gets updated
-
+1. useEffect(()=>{}), if no dependency array is given, then useEffect will be called at every render of the component.
+2. useEffect(()=>{},[]) If the dependency is an empty array, then useEffect will be called at the first render of the component(just once).
+3. useEffect(()=>{},[btnname]) If the dependency is not an empty array, then useEffect will be called when the btnanme variable gets updated
 
 useState
 -----------
-
-useState() is used to create local state variables inside your functional component
-NOTE: do not create state variables inside conditional statements or for loop or functions.
-------
+useState() is used to create local state variables inside your functional component (so always call it inside your functional component, and always call it at the top of your component(preferred))
+NOTE: do not create state variables inside conditional statements(if-else)(otherwise it creates inconsistencies) or for loops or functions.
 
 npm react-router-dom is installed to access the router facility to enhance the multi-page concept
-e.g if i write /about in url we will redirect to about us page
+e.g if I write /about in url we will redirect to the about us page
 
 createBrowserRouter creates an Router configuration
 --------------------- 
