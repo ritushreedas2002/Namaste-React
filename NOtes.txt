@@ -487,6 +487,7 @@ how to find API? : go to website ->inspect->network->click on fetch option->left
 Suppose instead of showing the Loading page while the API does response and re-renders we can show a spinning loader or shimmer UI which is the shadow of the whole original UI.
 
 const [button,setbutton]=useState("Login");
+
 how the const variable is changed?
 so when we click "Login", setbutton function executes, and React ensures to find the difference between the previous virtual DOM and the modified virtual DOM and then re-renders the 
 component once again, so again a new button variable is created with the modified value.
@@ -494,13 +495,18 @@ component once again, so again a new button variable is created with the modifie
 
 const [searchtext, setsearchtext] = useState("");
 <input type='text' className='search-box' value={searchtext}></input>   
-to keep track of the input we need to bind it with the local state variable .
-NOTE: when at each keystroke the nothing shows in input text this is because .... the value is bind to seacrtext and the value is bind to input type
-so at at change the value still remain ""
+We need to bind the input with a local state variable to keep track of the input that the user types in.
 
-so we need to add onChange event handler :---that as the input changes we are changing the seachtext value
-at each key stroke the react component gets render again and again
-whenever a state variable updates,react tru=iggers a recoincilation cycle.
+NOTE: when at each keystroke nothing shows in the input text this is because .... the 'value' is tied/bind to 'searchtext' and the 'input' box is tied/bind to the 'searchtext'
+so even if we try to change the value in the input box, it still remains the same as the searchtext is still ""
+
+** So we need to add an onChange event handler:---so that as the input changes, the searchtext value also changes 
+at each keystroke, the react component gets rendered again and again
+
+** Whenever a state variable updates, react triggers a reconciliation cycle(re-renders the component).
+React is re-rendering the whole component but it is only updating the input box value inside the DOM
+
+** React is so fast because it does DOM manipulation with high efficiency, because of the new reconciliation algorithm, whenever React has to re-render a component, it only updates the part that is getting changed by comparing the past and present virtual DOM
 
 NOTE:
 -------
