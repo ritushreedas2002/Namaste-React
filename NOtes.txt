@@ -533,9 +533,9 @@ NOTE: do not create state variables inside conditional statements(if-else)(other
 npm react-router-dom is installed to access the router facility to enhance the multi-page concept
 e.g if I write /about in url we will redirect to the about us page
 
-createBrowserRouter creates an Router configuration
---------------------- 
-createBrowserRouter([{},{}]) takes a list of object where each object is given it s path and the element to be rendered at that specific path.
+createBrowserRouter() creates an Router configuration(means some information that will define what will happen on a specific route)
+---------------------
+createBrowserRouter([{},{}]) takes a list of objects where each object is given its path and the element to be rendered at that specific path.
 
 RouterProvider is used to provide the createBrowserRouter
 ----------------
@@ -596,19 +596,10 @@ const appRouter=createBrowserRouter([
     element:<AppLayout/>,
     errorElement:<Error/>
     children:[
-      {
-    path:"/about",
-    element:<About/>,
-    errorElement:<Error/>
-    },
-    {
-    path:"/contact",
-    element:<Contact/>,
-    errorElement:<Error/>
-    }
-  ]
- }
-  
+      { path:"/about", element:<About/>, errorElement:<Error/> },
+      { path:"/contact", element:<Contact/>, errorElement:<Error/> }
+    ]
+ }  
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
