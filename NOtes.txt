@@ -537,9 +537,10 @@ createBrowserRouter() creates an Router configuration(means some information tha
 ---------------------
 createBrowserRouter([{},{}]) takes a list of objects where each object is given its path and the element to be rendered at that specific path.
 
-RouterProvider is used to provide the createBrowserRouter
-----------------
+RouterProvider is used to provide the createBrowserRouter and change pages based on the required path
+--------------
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
+ 
 const appRouter=createBrowserRouter([
   {
     path:"/",
@@ -556,6 +557,16 @@ root.render(
  <RouterProvider route={appRouter}/>
 );
 
+** rafce -> shortcut for creating basic functional components and exporting them
+
+** 'react-router-dom' already provides a default error page for you, which is used in case some other error page is not created explicitly
+
+** Another important hook is useRouteError, which gives more details about the different types of errors that can occur
+import { useReactError } from 'react-router-dom';
+
+you can catch the error like this ->
+const err = useReactError();   // this returns an object that contains all the details of the error that occurs in the current page
+console.log(err);
 
 Another approach:
 -------------------
@@ -578,9 +589,9 @@ root.render(
   </Router>
 );
 
+** Now suppose I want my Header component to constantly show across different pages
+then I have to make the other pages as the children of the AppLayout component, as it contains the Header component in itself
 
-now suppose i want my header component to be a constant :
-so 
 import { createBrowserRouter,RouterProvider,Outlet } from 'react-router-dom';
 const AppLayout =()=>{
   return(
@@ -596,6 +607,7 @@ const appRouter=createBrowserRouter([
     element:<AppLayout/>,
     errorElement:<Error/>
     children:[
+      { path:"/", element:<Body/>, errorElement:<Error/> },
       { path:"/about", element:<About/>, errorElement:<Error/> },
       { path:"/contact", element:<Contact/>, errorElement:<Error/> }
     ]
@@ -607,12 +619,16 @@ root.render(
  <RouterProvider route={appRouter}/>
 );
 
-now when path "/" is rendered the <AppLayout/> is rendered in place of <Outlet/>
+now when path "/" is rendered the <Body/> is rendered in place of <Outlet/>
 now when path "/about" is rendered the <About> is rendered in place of <Outlet/>
-so the header component remains intact and below that we add the outlet....
+so the Header component remains intact and below that we add the outlet...
 
-by clicking on about it moves to about page using <a> anchor tag it reloads the whole page which is a bad practice so we use the <link> tag
-from react-router-dom. It is a wrapper of teh <a> tag
+so whenever there is a change in the path, this Outlet will be filled with the children acc to the path
+
+by clicking on 'About', it can move to the 'About' page using <a> anchor tag, which reloads the whole page(thus takes longer), which is bad practice, so we use the 'Link' component(it does not reload the whole page fully) from react-router-dom. It is a wrapper of the <a> tag
+import { Link } from 'react-router-dom';
+
+** So whenever you are navigating to a different route, always use a Link component
 
 Routing
 ----------
