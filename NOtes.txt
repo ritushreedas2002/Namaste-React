@@ -632,14 +632,15 @@ import { Link } from 'react-router-dom';
 
 Routing
 ----------
-1.Client Side Routing -  we are not making any sort of network call, rather we are doing changing of components as about, contact 
-component already loaded in your local host.When we go to aboutus page it loads the about component
+1. Client-Side Routing -  we are not making any sort of network call, rather we are doing changing of components as about, contact 
+component already loaded in your local host. When we go to 'About us' page it loads the about component
 
-2.Server Side Routing - When the local host, makes a network call fetches the data for AboutUS page and reloads the page.
+2. Server Side Routing - When the local host makes a network call, it fetches the data for the About us page and reloads the page.
 
 Dynamic Routing :
-where fr each restaurant another page will be created
-path="/restaurant/:resId" so this resId  is dynamic
+-----------------
+where for each restaurant different page will be created
+path: "/restaurant/:resId" so this resId  is dynamic, defined by a : in front
 
 useParams from react-router-dom is used to find the id of the various dynamic routing.Params is a object with the unique id
 e.g-http://localhost:3000/restaurants/78511 ,useParams fetches the id :78511
