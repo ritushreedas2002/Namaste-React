@@ -541,7 +541,7 @@ RouterProvider is used to provide the createBrowserRouter and change pages based
 --------------
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
  
-const appRouter=createBrowserRouter([
+const appRouter = createBrowserRouter([
   {
     path:"/",
     element:<App/>
@@ -605,7 +605,7 @@ const appRouter=createBrowserRouter([
   {
     path:"/",
     element:<AppLayout/>,
-    errorElement:<Error/>
+    errorElement:<Error/>,
     children:[
       { path:"/", element:<Body/>, errorElement:<Error/> },
       { path:"/about", element:<About/>, errorElement:<Error/> },
@@ -643,7 +643,8 @@ where for each restaurant different page will be created
 path: "/restaurant/:resId" so this resId  is dynamic, defined by a : in front
 
 useParams from react-router-dom is used to find the id of the various dynamic routing.Params is a object with the unique id
-e.g-http://localhost:3000/restaurants/78511 ,useParams fetches the id :78511
+useParams returns an object which contains the resId property(resId is the dynamic route part that you passed in the createBrowserRouter)
+e.g-http://localhost:3000/restaurants/78511, useParams fetches the id :78511
 
 which further is used for dynamic routing
 
