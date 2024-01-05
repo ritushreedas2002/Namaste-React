@@ -653,6 +653,88 @@ Dynamic Routing:
 Dynamic routing refers to the practice of generating routes dynamically based on certain parameters or data
 e.g:<Route path="/user/:userId" element={<UserProfile />} /> userId keeps chaging according to individual ids.
 
+** DO NOT USE TERNARY OPERATOR EVERYWHERE, AS YOU MAY RUN INTO UNWANTED ERRORS,
+ONE SUCH SITUATION IS IF YOU ARE INITIALISING A STATE VARIABLE WITH NULL, AND LATER UPDATING IT WITH AN OBJECT WHICH IS FETCHED FROM SOME API
+THEN IF YOU WANT TO ACCESS A PROPERTY OF THAT OBJECT, THE FOLLOWING ERROR MAY SHOW:-
+TypeError: Cannot destructure property 'name' of '(intermediate value)' as it is undefined.
+AS THE REQUIRED PROPERTY CANNOT BE EXTRACTED INITIALLY WHEN THE VARIABLE IS NULL
+E.G.-
+
+const [resInfo, setResInfo] = useState(null);
+
+useEffect(() => {
+    fetchMenu();
+  }, []);
+
+const fetchMenu = async () => {
+    const data = await fetch(
+      MENU_API + resId + "&catalog_qa=undefined&submitAction=ENTER"
+    );
+    const json = await data.json();
+    console.log(json);
+    setResInfo(json.data);
+ };
+
+const { name, cuisines, costForTwoMessage } =
+    resInfo?.cards[0]?.card?.card?.info;
+
+  const { itemCards } =
+    resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
+  console.log(itemCards);
+
+  return resInfo === null ? (
+    <Shimmer />
+  ) : (
+    <div className="menu">
+      <h1>{name}</h1>
+      <h2>{cuisines.join(", ")}</h2>
+      <h3>{costForTwoMessage}</h3>
+      <ul>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - Rs.{item.card.info.price / 100}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default RestaurantMenu;
+
+INSTEAD YOU MUST DECLARE THE ALTERNATE CONDITION SEPARATELY IN A IF CONDITION:-
+
+if (resInfo === null) {
+    return <Shimmer />;           // SHOW THIS BEFORE DESTRUCTURING THE OBJECT, SO THAT DESTRUCTURING IS ONLY DONE WHEN THE OBJECT IS NOT NULL
+  }
+const { name, cuisines, costForTwoMessage } =
+    resInfo?.cards[0]?.card?.card?.info;
+
+  const { itemCards } =
+    resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
+  console.log(itemCards);
+
+  return (
+    <div className="menu">
+      <h1>{name}</h1>
+      <h2>{cuisines.join(", ")}</h2>
+      <h3>{costForTwoMessage}</h3>
+      <ul>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - Rs.{item.card.info.price / 100}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+** ANOTHER IMPORTANT ERROR WHILE FETCHING DATA FROM SOME EXTERNAL API IS:-
+TypeError: Cannot read properties of undefined (reading 'length')
+THIS OCCURS WHEN YOU WANT TO RENDER A LIST OF ELEMENTS(OBJECTS), BUT THE VARIABLE IN WHICH YOU WANT TO ASSIGN THE LIST,
+HAS BEEN ASSIGNED SOME OTHER OBJECT INSTEAD OF A LIST, THUS SHOWING THIS ERROR
+BECAUSE A LIST ALWAYS HAS A LENGTH PROPERTY
 
 --------------------------------------------------------------EPISODE 8------------------------------------------------------------------------
 
