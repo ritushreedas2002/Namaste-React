@@ -625,7 +625,7 @@ so the Header component remains intact and below that we add the outlet...
 
 so whenever there is a change in the path, this Outlet will be filled with the children acc to the path
 
-by clicking on 'About', it can move to the 'About' page using <a> anchor tag, which reloads the whole page(thus takes longer), which is bad practice, so we use the 'Link' component(it does not reload the whole page fully) from react-router-dom. It is a wrapper of the <a> tag
+by clicking on 'About', it can move to the 'About' page using <a> anchor tag, which reloads the whole page(thus takes longer), which is bad practice, so we use the 'Link' component(it does not reload the whole page fully) from react-router-dom. It is a wrapper of the <a> tag, though which 'react-router-dom' keeps a track of this link.
 import { Link } from 'react-router-dom';
 
 ** So whenever you are navigating to a different route, always use a Link component
@@ -741,17 +741,17 @@ BECAUSE A LIST ALWAYS HAS A LENGTH PROPERTY
 CLASS BASED Component
 -------------------------
 
- <UserClass name="Ritushree Das" location ="Address"/>
- ALl the props u have passed will bind into a single object ...
+ <UserClass name={"Ritushree Das"} location ={"Address"}/>
+ ALl the props you have passed will bind into a single object ...
 
-import React from "react";
+import React from "react";                       // React.Component class is given to us by React
 import "./User.css";
-class UserClass extends React.Component{
-    constructor(props){
-        super(props);        and then the obj will be passed to the Component
+class UserClass extends React.Component{         // this 'extends React.Component will let React know that this is a class based component
+    constructor(props){                          // in class-based components, the constructor recieves the props
+        super(props);                            // and then the obj will be passed to the Component
     }
 
-    render(){
+    render(){                                   // this render() method will return a piece of JSX which will be displayed onto our UI 
         return <div className="User-card">
             <div>NAME :{this.props.name}</div>
             <div>Location:{this.props.location}</div>
@@ -761,6 +761,14 @@ class UserClass extends React.Component{
 }
 
 export default UserClass;
+
+** In funtional component, the arrow function returns a piece of JSX, in class-based components, the render() method returns a piece of JSX
+
+Why do we need to write super(props) in class-based components?
+---------------------------------------------------------------
+In React, you need to write super(props) in the constructor of a child component to call the constructor of the parent component. This is necessary because React uses a class hierarchy to render components, and each child component inherits the properties and methods of its parent component. By calling super(props), the child component is able to access the properties and methods of its parent component.
+If you do not write super(props) in the constructor of a child component, React will throw an error. This is because React needs to be able to access the properties and methods of the parent component in order to render the child component.
+We might require props inside the child component constructor with this keyword. super() function calls the constructor of the parent class. Using super constructor with props arguments basically allows accessing this.   // use of 'this' keyword
 
 ----------NOTE: we can also write ------------------
 class UserClass extends React.Component {
