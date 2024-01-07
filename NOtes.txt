@@ -880,28 +880,36 @@ Parent componentDidMount
 LIFECYCLE 
 ----------------
 2 PHASES:
-1. render phase (is fast)
-in the render phase --the first constructor is called then the render method
+1. Render phase (is fast)
+in the render phase -- first constructor is called then the render method
 
-2. Commit phase (is slow)
+2. Commit phase (is slow) (bec updating the DOM is an expensive task)
 after all the updation in the DOM through the render phase then DidMount is called
-so DidMount is the place where API is called.
+so DidMount is the place where API is called. 
+DOM is also updated in a single batch, after calculating the DIFF of all the elements in the virtual DOM
+
+** REACT DOES CODE OPTIMIZATION BY BATCHING THE RENDER PHASE OF ALL THE CHILD COMPONENTS TOGETHER, AND THEN THE COMMIT PHASE
+THUS IF A PARENT COMPONENT HAS MULTIPLE CHILD CONSTRUCTOR, ONLY THE RENDER PHASE (CALLING CONSTRUCTOR + CALLING RENDER) OF ALL ITS CHILDREN ARE COMPLETED FIRST
 
 -------------MOUNTING CYCLE---------------
 -Constructor(dummy data)
 -Render (dummy data)
       <HTML dummy>
-componentDidMount
+-componentDidMount
       <API CALL>
-      this.setstae--->state variable updated
+      <this.setState>--->state variable updated
 
 ----------UPDATING CYCLE------------
--   render(API data)
-     <HTML (new api data)/>
+-Render(API data)
+     <HTML (new API data)/>
 -componentDidUpdate
---------------UNmounting cycle---------
+
+--------------UNMOUNTING CYCLE---------
 -componentWillUnmount
+       this is called just before unmounting the component
        this will be called when we go to another page
+
+** In functional components, after fetching API data, we change the state variables inside fetchData() only, similarly, in class-based components, after fetching API data, you need to change state variables using this.setState() inside componentDidMount() only
 
 ----------------------------------------------------EPISODE 9---------------------------------------------------------------------------------
 
