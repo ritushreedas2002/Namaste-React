@@ -937,17 +937,18 @@ Dynamic bundling or chunking, often referred to as code splitting, is a techniqu
  instead of loading the entire JavaScript code at once. This is particularly useful for large-scale applications where the initial download size
   can be substantial.
 
-  -----LAZY LOADING/(ON-demand Loading)----------
+  -----LAZY LOADING/(ON-Demand Loading or Dynamic Import)----------
   Lazy loading is a technique used in web development to defer the loading of certain assets (such as images, scripts, or stylesheets) until they are
    actually needed.
-   when our app loads the grocery does not loads, when we go to grocery at that point it loads
-   -----Lazy() is a named export given by react
-    -It takes a callback function calling import() function and inside import function taking the path of the grocery
-    so making grocery having its own bundle and and the main bundle is different(app.js)
+   when our app loads the grocery does not load, when we go to the grocery at that point it loads
+   -----lazy() is a named export given by react
+    -It takes a callback function calling the import() function and inside the import function the path of the component that needs to be loaded on demand is given
+    so making grocery have its own bundle and the main bundle is different(app.js)
+
    ----Suspense------
     <Suspense fallback={<Shimmer />}><Grocery /></Suspense>
-    Suspense is writtern as without it an error occurs as when our app loads it trys t load Grocery but cannot so we need to write suspense fallback 
-    whick shows what to be loaded in absence of Grocery
+    Suspense is written as without it an error occurs. As when our app tries to load the Grocery component instantly, it cannot because it takes a few milliseconds to load the component, so we need to write a Suspense fallback, which is a named import from react
+    that shows what will be loaded in the absence of Grocery component(that intermediate state of loading the component)
 
 
 ------------------------------------------------------EPISODE 10---------------------------------------------------------------------------------
