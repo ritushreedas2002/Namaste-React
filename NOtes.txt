@@ -742,12 +742,12 @@ CLASS BASED Component
 -------------------------
 
  <UserClass name={"Ritushree Das"} location ={"Address"}/>
- ALl the props you have passed will bind into a single object ...
+ All the props you have passed will bind into a single object ...
 
 import React from "react";                       // React.Component class is given to us by React
 import "./User.css";
-class UserClass extends React.Component{         // this 'extends React.Component will let React know that this is a class based component
-    constructor(props){                          // in class-based components, the constructor recieves the props
+class UserClass extends React.Component{         // this 'extends React.Component will let React know that this is a class-based component
+    constructor(props){                          // in class-based components, the constructor receives the props
         super(props);                            // and then the obj will be passed to the Component
     }
 
@@ -762,7 +762,7 @@ class UserClass extends React.Component{         // this 'extends React.Componen
 
 export default UserClass;
 
-** In funtional component, the arrow function returns a piece of JSX, in class-based components, the render() method returns a piece of JSX
+** In functional component, the arrow function returns a piece of JSX, in class-based components, the render() method returns a piece of JSX
 
 Why do we need to write super(props) in class-based components?
 ---------------------------------------------------------------
@@ -770,40 +770,68 @@ In React, you need to write super(props) in the constructor of a child component
 If you do not write super(props) in the constructor of a child component, React will throw an error. This is because React needs to be able to access the properties and methods of the parent component in order to render the child component.
 We might require props inside the child component constructor with this keyword. super() function calls the constructor of the parent class. Using super constructor with props arguments basically allows accessing this.   // use of 'this' keyword
 
-----------NOTE: we can also write ------------------
+
 class UserClass extends React.Component {
-  render() {
+  constructor(props) {             // constructor is always called at first, whenever an instance of that class is created, thus it is preferred to declare the state variables inside it
+    super(props);
+    this.state = {                     // this.state is a large object that contains all the state variables (in functional components, even though we declare multiple state variables 
+      count: 0,                           separately, but behind the scenes, React manages a large object for all the state variables like this)
+      count2: 2                        // creating state variable is always inside the constructor
+    }
+  }
+
+  render() {  
+    const {name} = this.props;           // destructuring this.props
+    const {count, count2} = this.state;  // destructuring this.state
     return (
-      <div className="User-card">
-        <div>NAME: {this.props.name}</div>
-        <div>Location: {this.props.location}</div>
-        <div>Contact Us: @ritz.das</div>
+      <div className="user-card">
+        <h1>Count : {count}</h1>
+        <h1>Count2 : {this.state.count2}</h1>
+        <h1>Name : {name}</h1>
+        <h2>Location : Kolkata</h2>
+        <h3>Contact : arpandesp@gmail.com</h3>
       </div>
     );
   }
 }
 
-export default UserClass;
-------------------------------------------------------------------------------------------------------------------
+** NEVER UPDATE STATE VARIABLES IN CLASS-BASED COMPONENTS DIRECTLY
+use this.setState() for this purpose
 
-creating state variable is always inside constructor
----now when About.js is mounted/loaded in the web page it then goes through the jsx line by line and when it sees that the UserClass Component
-is called an instance of component or the component is initialised.
+    <button
+          onClick={() => {
+            this.setState({                    // we pass an object inside this.setState(), which contains the updated value of the state variables
+              count: this.state.count + 1,     // you can also update some other state variables inside this this.setState(), if necessary(updating simultaneously)
+            }); 
+          }}
+        >
+          Increase count
+    </button>
 
-LifeCycle
------------
-Parent Constructor-->Parent Render-->Child Constructor --->Child Render
 
-componentDidMount(){
-  console.log("HII MOUNT");
+---now when the About component is mounted/loaded in the webpage it then goes through the JSX line by line and when it sees that the UserClass Component, it then starts loading the UserClass component, and an instance of the component is created, which calls its constructor at first, and then the render() method.
+
+LifeCycle of Hierarchical Class-based Component(both parent & child are Class-based Component)
+----------------------------------------------------------------------------------------------
+Parent Constructor-->Parent Render-->Child Constructor-->Child Render
+
+componentDidMount(){           // this componentDidMount() method executes only when the component inside which it is declared, actually mounts on our webpage, i.e., 
+  console.log("HII MOUNT");       // constructor --> render() --> componentDidMount()
 }
+
+Parent Constructor-->Parent Render-->Child Constructor-->Child Render-->Child Component did Mount-->Parent Component did Mount
+//once the child component is mounted successfully then the parent component is finished mounting
+
+** An important use case of componentDidMount() is to make API calls because we don't want to wait for the result of the API call, thus we render our class component quickly at first, then receive data from the API call and then re-render it
+
+** Because of this same reason, we make API calls in functional components using useEffect(), which is called once the component has been loaded
 
 now first when UserClass is loaded the sequence of loading follows:
 1.Constructor
 2.render
 3.componentDidMount
 --------------------------------------------
-now suppose if About.js is a class based component --->calling--->UserClass which is also a class Based component
+now suppose if About.js is a class-based component --->calling--->UserClass which is also a class Based component
 Calling sequence---
 1.Parent Constructor
 2.Parent render
@@ -813,14 +841,50 @@ Calling sequence---
           3.child componentDidMount
 3.Parent componentDidMount
 ------------------------------------------------
+
+** FOR MULTIPLE CHILDREN OF PARENT CLASS
+
+class About extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("Parent Constructor");
+  }
+  componentDidMount() {
+    console.log("Parent componentDidMount");
+  }
+  render(){
+    console.log("Parent render");
+    return (
+      <div>
+        <h1>About</h1>
+        {/* <User name={"Arpan De USER"}/> */}
+        <UserClass name={"Arpan De USERclass"}/>      //Child 1
+        <UserClass name={"Another Guy USERclass"}/>   //Child 2
+      </div>
+    );
+  }
+}
+
+Flow will be->
+--------------
+Parent Constructor
+Parent render
+    Child 1 Constructor
+    Child 1 render
+    Child 2 Constructor
+    Child 2 render
+    Child 1 componentDidMount
+    Child 2 componentDidMount
+Parent componentDidMount
+
 LIFECYCLE 
 ----------------
-2PHASES:
-1.render phase (is fast)
-in render phase --first constructor called then render method
+2 PHASES:
+1. render phase (is fast)
+in the render phase --the first constructor is called then the render method
 
-2.Commit phase (is slow)
-after all the updation in DOM through render phase then DidMount is called
+2. Commit phase (is slow)
+after all the updation in the DOM through the render phase then DidMount is called
 so DidMount is the place where API is called.
 
 -------------MOUNTING CYCLE---------------
