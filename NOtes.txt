@@ -913,15 +913,25 @@ THUS IF A PARENT COMPONENT HAS MULTIPLE CHILD CONSTRUCTOR, ONLY THE RENDER PHASE
 
 ----------------------------------------------------EPISODE 9---------------------------------------------------------------------------------
 
+** We must follow the Single Responsibility Principle(i.e., a component should have only one major responsibility) while building different components for our application, which brings modularity to our code and makes our code:-
+    -Reusable
+    -Maintainable
+    -Testable
 
 CUSTOM HOOKS
 ----------------
 A user created Hook which is a utility function.
-Naming convention:write the component starting with "use"
+Naming convention: write the component starting with "use".
 
-Now to move offline go to inspect-->network-->then in drop down no throtting to offline
+** In order to create a custom hook, you need to determine the contract, i.e., you need to properly specify what is the input for that hook(e.g. some data that comes from the caller function), and what is its output
 
-----DYNMAIC BUNDLING--------
+Now to move offline go to inspect-->network-->then in drop down no throttling, select offline
+
+** Suppose your app has 1000 components, you may load 1000 components, or you may bundle all of them into 1 JS file. 
+In the first case, there will be too many function calls, in the second case, the size of the JS file will become very large. Thus both are not viable solutions. 
+In order to solve this problem, we use the concept of Chunking or Code Splitting, which is basically dividing our application into smaller logical chunks.
+
+----DYNAMIC BUNDLING--------
 Dynamic bundling or chunking, often referred to as code splitting, is a technique used in web development to improve the performance
  and loading time of a web application. The idea is to split the JavaScript code into smaller "chunks" or "bundles" and load them on-demand, 
  instead of loading the entire JavaScript code at once. This is particularly useful for large-scale applications where the initial download size
