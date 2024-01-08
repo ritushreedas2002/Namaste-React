@@ -985,16 +985,17 @@ these 3 lines to use tailwind in our CSS file
 
 TailwindCSS automatically gives you class names for all the CSS that you need to write
 
-  in tailwind, everything happens related to the class name
+In TailwindCSS, everything happens related to the class name
 
 Dynamic classes in tailwind w-[200px]
-  Disadvantage of tailwindcss-
+
+  Disadvantages of tailwindcss-
   1. it makes the code look ugly
   2. it becomes messy to handle 
 
   Advantages--
-  1.t is very light-weight 
-  as if we write 10 times m-4 it jst take it as once
+  1. It is very light-weight, if we write 10 times m-4 it just takes it as one m-4 class
+  2. It loads only those CSS that are required in our webpage, suppose a shadow class is mentioned in the code, but it is not used, then it will not load that shadow class
 
 
   -------------------------------------------------EPISODE 11---------------------------------------------------------------------------------
