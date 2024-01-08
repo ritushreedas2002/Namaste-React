@@ -952,26 +952,43 @@ Dynamic bundling or chunking, often referred to as code splitting, is a techniqu
 
 
 ------------------------------------------------------EPISODE 10---------------------------------------------------------------------------------
-Other ways of writing css--
-1.sass 2.scss 3.styled component
+
+Types of writing CSS--
+1. Normal CSS    2. SASS/SCSS    3. Styled component    4. Tailwind CSS
+
 ---------LIB-----------------------
 MAterialUI library (in react)
 ChakraUI 
 Bootstrap
 ant design
 ----------------------------------
-Tailwind css works with various frameworks,normal HTML..and so on
-Taiwind css usus postcss behind the scene .(Postcss is a tool for transforming js to css)
+
+Tailwind CSS works with various frameworks, normal HTML..and so on
+Tailwind CSS uses postcss behind the scenes. (Postcss is a tool for transforming CSS with JavaScript)
 
 npx tailwindcss init -----it will create a taiwind.config.js
 content: [
     "./src/*/.{js,jsx,ts,tsx}",
   ],
-  telling tailwind can be used in js file,jsx file ans so on
-  in tailwind, everything happens related to class name
+  telling our project that tailwind can be used in js file,jsx file, and so on
 
-Dynamic classes in tailwing w-[200px]
-  Disadvantage of taiwindcss-
+.postcssrc is the configuration file for postcss
+taiwind.config.js is the configuration file for tailwindcss
+
+Parcel needs this .postcssrc file to understand what is written in tailwind 
+
+in index.css file, you need to write
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+these 3 lines to use tailwind in our CSS file
+
+TailwindCSS automatically gives you class names for all the CSS that you need to write
+
+  in tailwind, everything happens related to the class name
+
+Dynamic classes in tailwind w-[200px]
+  Disadvantage of tailwindcss-
   1. it makes the code look ugly
   2. it becomes messy to handle 
 
@@ -986,8 +1003,6 @@ Dynamic classes in tailwing w-[200px]
 
   it basically used for enhancement suppose in the body component we want some cards to be labelled as promoted by our app.
   NOTE: as promoted not in the API so making every rescard id which is divisible by 5 as promoted.... 
-
-
 
   ----UI APPLICATION-----
   1.UI LAYER
