@@ -1015,23 +1015,22 @@ Dynamic classes in tailwind w-[200px]
   (The data layer consists of props, state variables, local variables ...etc) (/Major thing is to handle the data layer/)
 
   FILTER----out all the item categories and enhance the individual restaurant menu
-  @ is not supported so we need to write ["@type"] or [@type]
-  The format of the categories (UI) is called ---"Accordion"
+  @ is not supported so we need to write ["@type"]
+  The expandable dropdown format of the categories (UI) is called ---"Accordion"
 
   ----REACT DEVELOPER TOOLS-----
-  featues----
-  1.Components
-        it shows the component hierarchy of the system
-  2.PROFILER
-        it mainly records ur actions and after stop recording it shows the components invoked
+  features----
+  1. Components
+        it shows the component hierarchy of the system, basically the virtual DOM
+  2. PROFILER
+        it mainly records your actions and after stopping recording it shows the components invoked
   
-  -----------CONTROLLED AND UNCONTROLLED Components--------LIFTING THE DATA-------------
-    RestaurantMenu is controlling the Restaurant Category as for suppose there are 4 categories and suppose if we expand recommended category all 
-    other categories must collapse.
+  -----------CONTROLLED AND UNCONTROLLED Components--------LIFTING THE STATE/DATA-------------
+    RestaurantMenu is controlling the Restaurant Category for now, suppose there are 4 categories, and suppose if we expand the recommended category all other categories must collapse.
 
-    This is called lifting the data as the control is on the hands of the parent not in the child
+    This is called 'lifting the data/state up' as the control is in the hands of the parent and not of the child
 
-    UNCONTROLLED---when restaurant category has its own state 
+    UNCONTROLLED---when the restaurant category controls their own state individually
 
     CONTROLLED COMPONENT FULL EXPLANATION 
     -------------------------------------------
@@ -1043,21 +1042,20 @@ Dynamic classes in tailwind w-[200px]
                 <RestaurantCategory key={category?.card?.card.title} 
                 data={category?.card?.card} 
                 showItems={index===showIndex?true:false}      //we are setting which category items to be showed 
-                setShowIndex={()=>setShowIndex(index)}/>      
-     ))}
-     By default category 0 is always showed with their items as showIndex initially 0.
-    showIndex is controlling which category to showed if category 0 is opened automatically other categories get closed 
-    on clicking on other categories the setShowIndex function is called which returns set the showIndex with its index value then
+                setShowIndex={()=>setShowIndex(index)}/>      //We are passing the setShowIndex function to the children because the children cannot directly access the state variable of 
+     ))}                                                        the parent 
+    By default, category 0 is always shown with their items as showIndex initially 0.
+    showIndex controls which category to be shown, if category 0 is opened automatically other categories get closed 
+    on clicking other categories the setShowIndex function is called which returns from the children RestaurantCategory and sets the showIndex with its index value then
     showItems gets equal to the actual index value and the index of the category  clicked which changes that particularly
-    category to true which means that category will show its items and other will not show their items
-
+    category to true which means that one category will show its items and others will not show their items
 
     RestaurantCategory.js (CHILD)
     -------------------------------------
 
     const RestaurantCategory=({data,showItems,setShowIndex})=>{
         const handleClick=()=>{
-          setShowIndex();
+          setShowIndex();          // whenever we click on an item, it will call this setShowIndex(index) from setShowIndex={()=>setShowIndex(index)} in its parent
       }
       return (
         <div>
@@ -1067,73 +1065,87 @@ Dynamic classes in tailwind w-[200px]
     )
  }
 
- Basically what happens on cLick of category it calls the setShowIndex() function which modifies the parent RestaurantMenu 
+ Basically what happens on click of a category is, it calls the setShowIndex() function which modifies the parent RestaurantMenu 
 
  LIFTING THE STATE UP ---PARENT CONTROLLING ITS CHILDREN
 
 ----------PROPS DRILLING--------------
- IN REACT,passing data through components is a tough work. So data flow is a one way. parent->children->children
+ IN REACT, passing data through components is a tough job. So data flow is one-way. parent->children->children
  root->children->children->ans so on
  Now suppose I want to pass the data to the last children so we need to move the data between its intermediate parents.
 
- In that case we useContext  so that we can pass the data directly.
- Because COntext is an approach like a global data is placed and any one can access it when needed. 
+ In that case, we use React Context so that we can pass the data directly.
+ Because Context is an approach like a global data is placed and anyone can access it when needed. 
  eg-logged in user info, or the theme (light or dark theme)
 
- createContext used for making a global data.
- useContext used for using the global data.
- const data=useContext(useContext);
+ createContext()(which is a utility function) is used for making global data. 
+import { createContext } from "react";
+ const UserContext = createContext({
+    loggrdInUser: "Default User",          // the object that we pass inside createContext() is like a global object or the context
+ });
+export default UserContext;
 
+ useContext() is another important hook that is used for accessing the global data.
+ const data = useContext(UserContext);
 
- In class based components
- <userContext.Consumer>
- {(data)=>console.log(data)}       it takes a callback function which take data that the global data
- </userContext.Consumer>
+ In class-based components -> You don't have hooks, thus use it in this way:-
+--------------------------
+ <UserContext.Consumer>
+ {(data)=>console.log(data)}      // Inside Consumer component, you need to write a piece of JSX that takes a callback function which gets access to that global data/context
+ </UserContext.Consumer>
 
  or more destructuring---
- <userContext.Consumer>
- {({loggedInUser})=>console.log(loggedInUser)}       it takes a callback function which take data that the global data
- </userContext.Consumer>
+ <UserContext.Consumer>
+ {({loggedInUser})=><h1>(loggedInUser)<h1/>}
+ </UserContext.Consumer>
 
- ------To modify the data and make the data accesible to all the other components we use userContext.Provider ------
+ ------To modify the data and make the data accessible to all the other components we use UserContext.Provider ------
+
   const [userName,setUserName]=useState();
   useEffect=(()=>{
    //API CALL;
    const data={
     name="Akshay Saini"
-   }
+   },
    setUserName(data.name);
   },[])
- <UserContext.Provider value={{userLoggedin:userName}}>
- <header/>
- <outlet/>
- </UserContext.Provider value={{userLoggedin:userName}}>
+
+ <UserContext.Provider value={{loggedInUser:userName}}>
+     <Header/>
+     <Outlet/>
+ </UserContext.Provider>
 
 Header component and other components inside the Provider can access the modified value;
-NOTE: it is very powerful as we can apply provider to somecomponents or the whole app.
+NOTE: it is very powerful as we can apply provider to some components or the whole app.
+The scope of a region in your app, where you want to change the value of the global data, should be inside the Provider component
+
+** You can also do nesting of Provider component
+ <UserContext.Provider value={{loggedInUser:userName}}>
+    <UserContext.Provider value="Arpan De">
+         <Header/>
+    </UserContext.Provider>
+      <Outlet/>
+ </UserContext.Provider>
+Here, the Outlet component will get updated by the value of userName, and the Header component will get updated by the value of "Arpan De"
 
 ------------------------------------------------------------------------------
-const [username,setusername]=useState();
-<UserContext.Provider value={{ loggedInUser:username,setusername }}>   //we can pass setusername so that we can access it anywhere
-      <Router>
-        <Header />
-        <Routes>
-        .
-        .
-        .
+const [userName,setUserName]=useState();
+<UserContext.Provider value={{ loggedInUser:userName,setUserName }}>   //we can pass setUserName so that we can update the userName from other components also
+    <Header />
+    <Outlet />
+</UserContext.Provider>
 
 Body.js
 --------
-
-const {loggedInUser,setusername}=useContext(UserContext);
-<input className='border border-black p-2 ' value={loggedInUser} onChange={(e)=>setusername(e.target.value)}></input>
-so  now on every change of key stroke the loggedInUser changes.
+const {loggedInUser,setUserName} = useContext(UserContext);
+<input className='border border-black p-2 ' value={loggedInUser} onChange={(e)=>setUserName(e.target.value)}></input>
+so now on every change of keystroke the loggedInUser changes.
 
 -----------------------------------------------------------------------
-usecontext and Redux Toolkit Different
+useContext and Redux Toolkit Different
 ===============================================
 redux is more scalable 
-in useContext we need to make diff context for different types of data.
+in useContext, we need to make different contexts for different types of data.
 
 State Management:
 
@@ -1142,7 +1154,7 @@ useContext:
 Primarily designed for managing local component state or sharing state between a few closely related components.
 State is managed within the component or a few related components.
 
-Redux:
+Redux: (It is a State Management Library, not inside React)
 ------
 Designed for managing a global state that can be accessed by any component in the application.
 State is stored centrally in a Redux store, and components can subscribe to changes in the state.
