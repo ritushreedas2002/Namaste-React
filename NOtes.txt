@@ -1005,7 +1005,19 @@ Dynamic classes in tailwind w-[200px]
   It is basically used for enhancement. Suppose in the body component we want some cards to be labeled as 'promoted' by our app.
   NOTE: as promoted not in the API so making every restaurantCard id which is divisible by 5 as promoted... 
 
-//code of HOC
+const withPopularLabel = (RestaurantCard) => {  // RestaurantCard is given as input to this HOC
+  return (props) => {
+    return (
+      <div>
+        <label className=" absolute bg-black p-2 m-2 text-white rounded-lg">Popular</label>
+        <RestaurantCard {...props}/>  //We are writing ...props, because we want to pass everything that we receive, without modifying the data       
+      </div>
+    );
+  };
+};
+
+You can access a HOC in the following way:-
+ const RestaurantCardPopular = withPopularLabel(RestaurantCard);
 
   ----REACT APPLICATION has 2 layers-----
   1. UI LAYER
