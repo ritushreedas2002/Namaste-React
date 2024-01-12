@@ -1175,37 +1175,61 @@ State is stored centrally in a Redux store, and components can subscribe to chan
 -------------------------------------------------------------------EPISODE 12------------------------------------------------------------------
 
 -------------------REDUX----------------------------------------
---------Works in the data Layer-----------------------
-NOTE:REDUX AND REACT ARE DIFF LIB.
+--------Works in the Data Layer-----------------------
+NOTE: REDUX AND REACT ARE DIFFERENT Libraries.
+
 REDUX is a lib used for managing state. (Another lib is zustand)
-Application becomes easier for debugging
-              TWO LIB
-                 |
-        -  - - -----------
-        |                 |
-        React-Redux     Redux-Toolkit(packages are intended to be 
-                                        the standard way of writing redux logic)
+Using Redux makes an Application easier for debugging
+
+                   TWO LIB
+                      |
+        ----------------------------------
+        |                                |
+    React-Redux                    Redux-Toolkit (packages are intended to be  the standard way of writing redux logic)
+(Bridges the gap b/w               (Also called RTK)
+React & Redux lib)
 
 VANILLA REDUX IS THE OLDER REDUX(WHICH SAYS DON'T MUTATE STATE)
---------REDUX STORE---------
-we can keep all the data in our redux store but slice wise .Slices can be (one is cart data slice),(other is loggedin user slice)
 
-CART button  (Click) ----->Dispatches an action---->calls a function---->which internally modifies the cart(slice)(updates the slice)
--------------
-What is the function?
-this is called as reducer function.
+--------REDUX STORE---------(A big JS object which is kept in a central global place)
+We can keep all the data in our redux store but slice-wise. 
+Slices can be small portions(logical partitions) of a redux store like:- (one is cart data slice),(other is logged-in user slice)
 
-Now how to read data from the cart slice in the redux store??
---------->from cart slice---->|Selector|----------->that reads the data ------->modifies the cart component.
-                |SELECTOR|------>(phenomenon is called subscribing to the store)(our header component have subscribed the store)
-npm i @redux/toolkit 
+** But you cannot directly write data/modify your slices in the Redux store
+You have to do it this way:-
+CART button (Click) ----->Dispatches an action---->calls a function---->which internally modifies the cart(slice)(updates the slice)
+                                                              ^
+                                                              |
+                 ----------------------------------------------
+                 |
+What is this function?
+this function is known as a reducer function.
+
+Now how to read data from the cart slice in the redux store?
+--------->from cart slice---->|Selector|----------->that reads the data from the store------->modifies the cart component on your app
+    using a |SELECTOR|------>(this phenomenon is called subscribing to the store) for e.g.-(our header component have subscribed the store) 
+** (The header component will reflect the changes as soon as the cart slice has been updated)
+
+Installation:->
+npm i @reduxjs/toolkit 
 npm i react-redux
 
--Build a store         ----configureStore()
--Connect the store to our app  ----------------<Provider store={}> 
--Cart (cartSlice)          ---------------------createSlice
--dispatch(Action)                 ---------------------reducers
--Selector     ----is nothing but a react hook ----useSelector
+Steps:-
+--------
+1) Build a store                        ----------------configureStore() --import { configureStore } from "@reduxjs/toolkit";
+2) Connect the store to our app         ----------------<Provider store={}> --import { Provider } from "react-redux";
+   (Provide the store to our app)             (We pass the store as a props to it)
+   // Just like Context.Provider, wrap everything(all the scope of the region) inside the Provider to which you want to provide the store
+3) Cart (cartSlice)                     ----------------createSlice({}) --import { createSlice } from "@reduxjs/toolkit";
+   // It takes a configuration to create a slice
+        First config -> name
+        Second config -> initialState (tells about the initial state of that slice)
+        Third config -> reducers (here we write the reducer functions corresponding to their actions)
+    reducers: {
+        addItem: (state, action) => {},  // this addItem is the action, and corresponding to it is the reducer function, 
+    }                                       which takes two parameters- 1. state(the state of our store), 2. action(what it will perform) (sometimes action is not needed)
+4) dispatch(Action)                     ----------------reducers
+5) Selector                             ----------------is nothing but a react hook ----useSelector
 
 const handleItems=(items)=>{
 
