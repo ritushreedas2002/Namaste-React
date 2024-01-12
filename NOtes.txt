@@ -1216,11 +1216,11 @@ npm i react-redux
 
 Steps:-
 --------
-1) Build a store                        ----------------configureStore() --import { configureStore } from "@reduxjs/toolkit";
-2) Connect the store to our app         ----------------<Provider store={}> --import { Provider } from "react-redux";
+1) Build a store                          ----------------configureStore() --import { configureStore } from "@reduxjs/toolkit";
+2) Connect the store to our app           ----------------<Provider store={}> --import { Provider } from "react-redux";
    (Provide the store to our app)             (We pass the store as a props to it)
    // Just like Context.Provider, wrap everything(all the scope of the region) inside the Provider to which you want to provide the store
-3) Cart (cartSlice)                     ----------------createSlice({}) --import { createSlice } from "@reduxjs/toolkit";
+3) Cart (cartSlice)                       ----------------createSlice({}) --import { createSlice } from "@reduxjs/toolkit";
    // It takes a configuration to create a slice
         First config -> name
         Second config -> initialState (tells about the initial state of that slice)
@@ -1228,26 +1228,32 @@ Steps:-
     reducers: {
         addItem: (state, action) => {},  // this addItem is the action, and corresponding to it is the reducer function, 
     }                                       which takes two parameters- 1. state(the state of our store), 2. action(what it will perform) (sometimes action is not needed)
-4) dispatch(Action)                     ----------------reducers
-5) Selector                             ----------------is nothing but a react hook ----useSelector
+    ** Also the store, i.e., appStore, has its own reducer, whose job is to combine the reducers of all its slices
+4) dispatch(Action)                       ----------------reducers, done by dispatch() --import { useDispatch } from "react-redux";
+5) Subscribe to the store(using Selector) ----------------is nothing but a react hook, useSelector() --import { useSelector } from "react-redux";
+    // const cartItems = useSelector((store) => store.cart.items);
+    // useSelector gives you access to the store, you need to mention which part of the store you want to access
 
 const handleItems=(items)=>{
-
+    // dispatch an action to add an item
+    dispatch(addItem("pizza"));           // this "pizza" is the action.payload
 }
+// Whatever you pass inside the action is given as a payload
+// Behind the scenes, redux creates an object   -   {payload: "pizza"}  
+
 onClick={()=>handleItems(items)}//correct way
-onClick={handleItems(items)}//NOT correct as we do not want to immediate call a function but call it when clicked
+onClick={handleItems(items)}//NOT correct as we do not want to immediately call a function but call it when the add button is clicked
 
 -----------------------------------
 const cartItems=useSelector((store)=>store.cart.items);//from the store we are only subscribing to a slice
-
 or
-const store=useSelector((store)=>store)//subscribe to the whole store
-const cartItems=store.cart.items;
+const store=useSelector((store)=>store);    //subscribe to the whole store
+const cartItems=store.cart.items;           // then subscribing to a slice
 
-note: not an effictive one as we donnot need any sort of update for other slice rather than cart SLice
+note: not an effective one as we do not need any sort of update for other slices rather than the cart SLice
 -----------------------------------------
 
-in appstore the slices are kept in 
+in appStore, the reducers from all its slices are kept in 
 reducer:{
   cart:cartReducer
 }
@@ -1255,11 +1261,9 @@ reducer:{
 in cartSlice 
 the reducer functions are kept in
 reducers:{
-  //mutating state directly, donot have to return and redux uses immer behind the scenes
-  addItem:(state,action)=>{     //state is a local var having value of initialState
-
-      state=["akhshay"]     //not mutating jst adding a another reference to the state
-
+  //mutating state directly, do not have to return, and redux uses immer behind the scenes
+  addItem:(state, action)=>{   //state is a local var having the value of the current state of that slice
+      state=["Akshay"]       //not mutating just adding another reference to the state
       state.items.push()     //mutating the state
   }
 }
@@ -1268,8 +1272,7 @@ but we export the cartSlice.reducer;
 
 reducers:{
   clearCart:(state,action)=>{ 
-
-    //in redux we cannot do simply console log--we need to use current
+    //in redux we cannot simply console log--we need to use current
     state=[];
     console.log(current(state));
     //either update the existing state or return the new state
