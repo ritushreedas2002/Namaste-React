@@ -1241,43 +1241,50 @@ const handleItems=(items)=>{
 // Whatever you pass inside the action is given as a payload
 // Behind the scenes, redux creates an object   -   {payload: "pizza"}  
 
-onClick={()=>handleItems(items)}//correct way
-onClick={handleItems(items)}//NOT correct as we do not want to immediately call a function but call it when the add button is clicked
+onClick={()=>handleItems(items)}//correct way (passing a callback function)
+onClick={handleItems(items)}//NOT correct as we do not want to immediately call a function but call it when the add button is clicked (this is calling a func right away)
 
 -----------------------------------
-const cartItems=useSelector((store)=>store.cart.items);//from the store we are only subscribing to a slice
+1. const cartItems=useSelector((store)=>store.cart.items);//from the store we are only subscribing to a slice
 or
-const store=useSelector((store)=>store);    //subscribe to the whole store
-const cartItems=store.cart.items;           // then subscribing to a slice
+2. const store=useSelector((store)=>store);    // subscribe to the whole store
+   const cartItems=store.cart.items;           // then subscribing to a slice
 
-note: not an effective one as we do not need any sort of update for other slices rather than the cart SLice
+note: 2nd way is not an effective one as we do not need any sort of update for other slices rather than the cartSlice
+// Whenever you are using a selector, make sure you are subscribing to the right portion of the store
 -----------------------------------------
 
 in appStore, the reducers from all its slices are kept in 
-reducer:{
+reducer:{               // one main reducer for the whole app containing multiple small reducers
   cart:cartReducer
 }
 
 in cartSlice 
 the reducer functions are kept in
 reducers:{
-  //mutating state directly, do not have to return, and redux uses immer behind the scenes
+  //mutating state directly(mandatory), return is not required, does this with the help of 'Immer' library (a tiny package that allows you to work with immutable state easily)
   addItem:(state, action)=>{   //state is a local var having the value of the current state of that slice
-      state=["Akshay"]       //not mutating just adding another reference to the state
-      state.items.push()     //mutating the state
+      state=["Akshay"];       //it won't work like this, because this is not mutating the state, just adding another reference to the state
+      state.items.push(action.payload);     //mutating the state
   }
 }
 
-but we export the cartSlice.reducer;
+** Suppose at a particular instance, the current state is state=["pizza"];, then if we do state=[];, then the state(which is a local variable) will be assigned to a new empty list, without modifying the original list/state, which would still contain "pizza", i.e., ["pizza"] would still be as it is
+
+** In Vanilla(older) redux => DON'T MUTATE STATE, returning was mandatory
+    const newState = [...state];
+    newState.items.push(action.payload);
+    return newState;
+** But behind the scenes, Redux does everything in the older way
 
 reducers:{
   clearCart:(state,action)=>{ 
-    //in redux we cannot simply console log--we need to use current
+    //in redux we cannot simply console log(since it creates a proxy object)--we need to use current
     state=[];
-    console.log(current(state));
-    //either update the existing state or return the new state
+    console.log(current(state));                                   // import { current } from "@reduxjs/toolkit";
+    //RTK says either update/mutate the existing state or return the new state
       state.items.length===0;
   -------OR----------
-      return {items:[]}
-  }
+      return {items:[]};  // whatever you return from the reducer, will replace whatever is present in the original state
+  }    // since original state was {items:["pizza"]}
 }
