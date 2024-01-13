@@ -1288,3 +1288,228 @@ reducers:{
       return {items:[]};  // whatever you return from the reducer, will replace whatever is present in the original state
   }    // since original state was {items:["pizza"]}
 }
+
+-----------------------------------------------------------EPISODE 13-------------------------------------------------------------------------
+TESTING
+------------
+
+Types of testing (Developers can do):
+1.Manual Testing --which mainly we focus whether the functionality is working fine or not according to the code.
+(we particularly see the functionality of the specific type but not the whole application)
+
+(So to check the whole application where a single line of code causes error for other functionalities or not)
+2.writing Test cases---that automatically tests our whole application.
+
+    -Unit Testing                ----(only one specific component)
+    -Integration testing              -----------(test the flow of data and control between diff components that will lead to some result)
+    -End to end testing(e2e testing)    ---------------(User lands on the page...and actions performed --to user leaving the page)
+
+   NOTE   ::::: Developers are responsible for unit testing and Integration testing
+
+---use React-testing library to write test cases in React
+(React testing lib is build on DOM testing LIB)
+React testing lib takes "jest" delightful js framework 
+
+-------INSTALLING PROCEDURE--------
+install--1.react-testing lib  2.jest
+now install jest working with Babel
+if we config babel and parcel has its diff babel config behind the scenes so that will conflict ....
+so we need to go to parcel then js then using other tools and write parcel.rc  basically to disable default babel transpilation
+then perforn npx jest --init
+install jsdom library
+
+-----------------------------------------------------------------EPISODE 14---------------------------------------------------------------------------------------
+NOTE:
+-----------------------------------
+LIB -FORMIK for validation of forms
+--------------------------------
+IN FORM:
+ <form onSubmit={(e)=>e.preventDefault}/>do this as if not done it tries to submit the form automatically which refreshes our page 
+ ,so to prevent it we do e.preventDefault
+
+--------------------------USEREF --------------------------
+To capture the email entered or password we can create individual state variable and onChange the value of the variable changes and then bind the 
+valu of the input with the state variable
+Other way:  is to use ref of the input
+--------
+This is where useRef () hook comes to the picture
+
+const email=useRef(null);
+
+<input ref={email}---------/>
+<button onClick={()=>console.log(email.current.value)}
+
+----FIREBASE AUTHENTICATION-------------
+
+1.create a project
+2.web and all actions and write the code in firebase.js according to instructions
+3.go to authentication and enable email/password
+4.then go to authentication doc and to to password auth then move to create password 
+  -there is a satement of auth which needs to ba writtern onced as it is used everywhere so write it in firebase.json
+5. write the logic of sign in and sign up
+6.Make a redux store of user slice -----
+6.1.For authentication handling go to onAuthChange of firebase authentication docs(manage users)
+     - onAuthChange handles whenever there is a change in the user details
+7.In useEffect {
+  write the logic of auth change and in sign in addUser to the redux store(Body.js)
+  and in sign out remove User from redux store
+}
+
+8.now in header do a sign out button and oncClick a event occurs
+that from firebase docs go to password authentication and go to sign out logic and if sign out navigate to home page(Header.js)
+
+9.To update teh name of the user ...go to mange users and update user profile if sign up is done correctly.
+and once update then navigate (Login.js)
+
+10. useSelector to fetch the icon from the redux store and dispaly only if the user is not null
+11.Bug---in signup the icon was not updating 
+    -So made the dispatch addUser after the profiel goth updated --- from auth.currentUser which consistes the current user
+
+
+------------------------------------------------------------EPISODE 15 & 16-----------------------------------------------------------------------------
+FIXING BUG-
+--------------
+
+when we are in / home page or login page changing the url to /browse we used to navigate which is not right .and if after the sign in user wants to go the 
+login page do not allow...
+
+SOLVING   :replacing the onaUth change to the header component as we know header is present everywhere so useEffect works fine in that as everytime
+-----------             there is a change or reload the header is very everywhere so once sign in /sign up it takes us to the browse page and after sign out
+                            it takes to login in page
+
+in useEffect() return the function as when called
+because when the component unmounts we donot want any sort of change.
+
+TMDB --movie database
+  -Login
+   -Edit profile
+   -API (left side)   find ur api key and api access token
+
+go to movie list -now playing---on demo code const options is mandatory to pass everytime so keep it in constants.
+   NOTE::::::::      ALL the aPi calls happen as we wrap our APP in strictmode
+------------------
+Why happens twice?React does extra rendering to check the consistency of ur data
+
+Browser
+-------
+
+-MAIN CONTAINER
+  -VideoBackground
+  -Video title
+-SECONDARYCONTAINER
+ -MovieList *n
+ -cards *n
+
+ NOTE: there can be multiple trailers of one movie or no trailer if no trailer take the first vid of that particular movie and it trailer exits take trailer
+
+ --MOVIElIST :POPULAR
+      -MOVIECARDS *N
+ ---mOVIELIST:NOW playing
+  |
+  |
+  |
+  |
+  (N)
+
+  Do tmdb image URL to get the CDN url
+
+
+  OPENAI:platform.openai
+  npm open ai---helper func to make api call directly
+  then after using console(gptresult.choices)
+
+  then go to tmdn search movies....and fetch the search api to fetch the individual details of the suggested movies'
+
+  .env  file all the secret keys are kept ---with REACT_APP at the starting
+
+  when we are clicking on gpt search or homepage we are making api call where our movies are already had the trailer vid
+  so we use memoization , to prevent refetching
+
+  const nowPlayingMovies=useSelector(store=>store.movies.nowPlayingMovies);
+  useEffect(()=>{
+
+        //memoisation   
+        !nowPlayingMovies && getNowPlayingMovies();
+    },[])
+
+    NOTE: we can tell user to give their open ai key and the users can use it instead of using our key---(implement in ur upcomming projects)
+    ---------Responsiveness-----
+  default :mobile(small screen )
+    sm: greater than small screen  (tab)
+    md :greater thann meduim screen(desktop)
+
+ -------------------------------------------------BONUS 1 && 2----------------------------------------------------------------------------------
+    Machine Coding Interview Round
+    ------------------------------------
+
+    1.Requirements (on the topic: what features to be added)
+    2.Tech Stack(UI layer:Tailwind css  DataLayer:React,react-router-dom,Redux and so on---)
+    3.Planning of the structure of our app(visualisation)
+
+    ReportWebVitals
+    ------------------
+    Web Vitals are a set of useful metrics that aim to capture the user experience of a web page. In Create React App, a third-party library is used
+     to measure these metrics (web-vitals). 
+
+    strictmode--React's Strict Mode is a development mode only feature for highlighting potential problems in an application. It helps to identify unsafe 
+    lifecycles, legacy API usage, and a number of other features.
+
+
+    GRID IN CSS- the whole grid is basically divided into 12 grid section 
+
+    AXIOS---fetching---for json handling
+
+NOTE:::::::::::
+  IN UTUBE : SEARch apis then search api key utube auth
+    IN GCP while making api key---(GO to lib and enable the utube v3 api) to access the token ( so that it works)
+
+    Header remains same:In BOdy only the watchPage,Maincontainer Changes so keet it in Children 
+    and do <Outlet/> after SIdebar in the Body.js
+
+
+    const [searchParams] = useSearchParams(); is given if not using normal params---/watch?v=
+
+    it is native browser search params;;;
+    we do v.get()   //as v was the name of the id
+
+    Debouncing---
+    suppose with every key stroke the api is getting an api call 
+
+    key-i 
+    render the component 
+    call the useEffect
+    start the timer -make an api call after 200ms
+
+    key-ip
+    destroy the component (useEffect return Method)
+    re-render the component 
+    call the useEffect
+    start the timer -make an api call after 200ms
+
+
+    //--in searching if we search the same keyword again it will not make an API call
+    //we use redux to do it.
+
+
+    ----------------------------------------------BONUS 3----------------------------------------------------------------------------------------
+    Live Chat ---Challenges face::---
+    1.Get Live Data (Data Layer )
+    2.UI Layer update (UI Layer)
+
+    Live Chat 
+    --Each comment is a div but when we comment comes it appends the new div ...
+    --this may lead to heavy weight of the HTML--
+    we need to handle the complications as well as the the UI experience
+
+    Two ways we can update the Live Data---
+    1.web socket (It creates an handshake between the UI and Server)(Bi-directional Live data)(No interval)
+        They are Heavy we do not need it.(eg-trading,websockets)
+    2.Long polling /(API polling) Ui requests  the Server and server send the data to the client. After the some interval it checks whether new data
+         has arrived or not
+          EG: Gmail,Utube live chat
+
+  UI experience---
+  that if after sometime it starts deletes the the live comments..it holds only a upto a certain length
+
+  //Infinte scroll Working::::::
+  Like OnScroll event -->we are making an api call an updating the redux store by appending the videos at the end.
