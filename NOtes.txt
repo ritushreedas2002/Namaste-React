@@ -530,6 +530,7 @@ useState
 useState() is used to create local state variables inside your functional component (so always call it inside your functional component, and always call it at the top of your component(preferred))
 NOTE: do not create state variables inside conditional statements(if-else)(otherwise it creates inconsistencies) or for loops or functions.
 
+** npm i -D react-router-dom
 npm react-router-dom is installed to access the router facility to enhance the multi-page concept
 e.g if I write /about in url we will redirect to the about us page
 
@@ -1319,6 +1320,29 @@ then perforn npx jest --init
 install jsdom library
 
 -----------------------------------------------------------------EPISODE 14---------------------------------------------------------------------------------------
+
+** npx create-react-app uses Webpack as a bundler(just like Parcel)
+    It gives you testing support. It installs react testing libraries by itself.
+
+** AN IMPORTANT ERROR
+Uncaught runtime errors:
+×
+ERROR
+You cannot render a <Router> inside another <Router>. You should never have more than one in your app.
+THIS ERROR WILL OCCUR IF YOU PUT A ROUTER BODY INSIDE ITSELF, E.G.-
+const Body = () => {
+  const appRouter = createBrowserRouter([
+    { path: "/", element: <Body /> },              // this Body is inside itself
+    { path: "/browse", element: <Browse /> },
+  ]);
+
+  return (
+    <div>
+      <RouterProvider router={appRouter} />
+    </div>
+  );
+};
+
 NOTE:
 -----------------------------------
 LIB -FORMIK for validation of forms
