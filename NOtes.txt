@@ -1346,48 +1346,78 @@ const Body = () => {
 NOTE:
 -----------------------------------
 LIB -FORMIK for validation of forms
---------------------------------
+-----------------------------------
+
+const isEmailValid = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(email);  // This is how you can whether the email is valid or not based on the regex, text() returns boolean
+
+** There are two ways to access value from input boxes
+1. Using State variables and binding them to value
+2. Using useRef() hook
+
 IN FORM:
- <form onSubmit={(e)=>e.preventDefault}/>do this as if not done it tries to submit the form automatically which refreshes our page 
- ,so to prevent it we do e.preventDefault
+ <form onSubmit={(e)=>e.preventDefault} ............ /> // This is done to prevent auto-submitting of the form, due to the clicking of any button inside it
+// If it is not done then it refreshes our page each time we click a button, so to prevent it we do e.preventDefault()
 
 --------------------------USEREF --------------------------
-To capture the email entered or password we can create individual state variable and onChange the value of the variable changes and then bind the 
-valu of the input with the state variable
-Other way:  is to use ref of the input
---------
-This is where useRef () hook comes to the picture
+To capture the email entered or password we can create individual state variables, and onChange the value of the state variable changes as we bind the value of the input with the state variable
+Another way:  is to use the reference of the input value
+------------
+This is where the useRef() hook comes into the picture
 
-const email=useRef(null);
+const email = useRef(null);  // useRef() takes an initial value
 
-<input ref={email}---------/>
-<button onClick={()=>console.log(email.current.value)}
+<input ref={email} .............. />  // This ref property gives you information about the input box in the form of an object  
+
+<button onClick={()=>console.log(email.current.value)}>
 
 ----FIREBASE AUTHENTICATION-------------
 
-1.create a project
-2.web and all actions and write the code in firebase.js according to instructions
-3.go to authentication and enable email/password
-4.then go to authentication doc and to to password auth then move to create password 
-  -there is a satement of auth which needs to ba writtern onced as it is used everywhere so write it in firebase.json
-5. write the logic of sign in and sign up
-6.Make a redux store of user slice -----
-6.1.For authentication handling go to onAuthChange of firebase authentication docs(manage users)
-     - onAuthChange handles whenever there is a change in the user details
-7.In useEffect {
-  write the logic of auth change and in sign in addUser to the redux store(Body.js)
-  and in sign out remove User from redux store
-}
-
-8.now in header do a sign out button and oncClick a event occurs
-that from firebase docs go to password authentication and go to sign out logic and if sign out navigate to home page(Header.js)
-
-9.To update teh name of the user ...go to mange users and update user profile if sign up is done correctly.
+1. Create a project
+2. Select Web and do all actions(npm i firebase - if you want firebase hosting) and write the code in firebase.js according to the instructions
+3. Go to authentication and enable email/password (IMP:- IF CORS IS ON, IT WON'T WORK, FIRST SWITCH IT OFF, THEN SAVE IT)
+4. Then go to firebase authentication in the documentation and go to Password authentication, then move to 'Create a password-based account' 
+  -there is a statement of auth, i.e., const auth = getAuth(); - that should be written only once as it is used everywhere so write it in firebase.js, and export it from there
+5. Write the logic for sign-in and sign-up
+6. Make a redux store of user slice -----
+    6.1. For authentication handling go to onAuthStateChanged of firebase authentication docs(in Manage Users)
+         - onAuthStateChanged handles whenever there is an authentication state change in the user details (thus we don't need to manage a user in the redux store)
+7. Inside useEffect (because we want to render only once after a state change), write the logic of auth change, and in sign-in in addUser to the redux store(Body.js) and in sign out remove User from the redux store
+8. Now in the header do a sign-out button and onClick an event occurs
+- From Firebase docs go to password authentication and go to sign out logic and if sign out navigate to the Login page(Login.js)
+9. To update the name of the user ...go to manage users and update the user profile if sign-up is done correctly.
 and once update then navigate (Login.js)
-
 10. useSelector to fetch the icon from the redux store and dispaly only if the user is not null
-11.Bug---in signup the icon was not updating 
-    -So made the dispatch addUser after the profiel goth updated --- from auth.currentUser which consistes the current user
+11. Bug---in signup the icon was not updating 
+    -So made the dispatch addUser after the profile goth updated --- from auth.currentUser which consists the current user
+
+** Just like in Parcel, where all the production-ready codes were kept in the 'dist' folder, in create-react-app, the production-ready codes were kept in the 'build' folder
+-- What do you want to use as your public directory? build
+-- Configure as a single-page app (rewrite all urls to /index.html)? No
+-- Set up automatic builds and deploys with GitHub? No
+
+IMPORTANT
+---------
+IF YOU DO firebase login YOU MAY FACE THE FOLLOWING ERROR:-
+firebase : File C:\Users\User\AppData\Roaming\npm\firebase.ps1 cannot be loaded because running scripts is disabled on this 
+system. For more information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=somenumber.
+TO SOLVE THIS, DO THE FOLLOWING:-
+1) OPEN POWERSHELL AS ADMINISTRATOR
+2) RUN Get-ExecutionPolicy - YOU WILL GET Restricted
+3) RUN Set-ExecutionPolicy RemoteSigned YOU WILL GET 
+Execution Policy Change
+The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose
+you to the security risks described in the about_Execution_Policies help topic at
+https:/go.microsoft.com/fwlink/?LinkID=yournumber. Do you want to change the execution policy?
+[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): 
+TYPE Y, AND HIT ENTER
+4) RUN Get-ExecutionPolicy - YOU WILL GET RemoteSigned (ERROR SOLVED)
+
+STEPS FOR DEPLOYMENT
+--------------------
+0. Install firebase CLI - 'npm install -g firebase-tools'
+1. Firebase login - 'firebase login'
+2. Initialize firebase - 'firebase init', then select Hosting
+3. Deploy command - 'firebase deploy'
 
 
 ------------------------------------------------------------EPISODE 15 & 16-----------------------------------------------------------------------------
