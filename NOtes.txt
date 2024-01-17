@@ -1449,54 +1449,64 @@ const Body = () => {
 POSSIBLE SOLUTIONS ARE->
 1) Use window.location.href to navigate
 2) Move your routing i.e., appRouter out of your Body.js, and put in at the App level, i.e. App.js or index.js
-3) Don't use navigate() here, but use it in some other place, that is within RouterProvider
+3) Don't use navigate() here, but use it in some other place, that is within RouterProvider, because navigate() will only work in the routes of the appRouter(not outside them), as appRouter is provided to the RouterProvider
+thus navigate() will only work in Login, children of Login, Browse, children of Browse
+4) Put the whole useEffect() in some global central place, which is there in our whole app but that should be also inside our RouterProvider (like Header in this case)
 
 ------------------------------------------------------------EPISODE 15 & 16-----------------------------------------------------------------------------
+
 FIXING BUG-
 --------------
+When we are in the "/" route i.e., on the homepage or login page then if we change the URL to "/browse" we will navigate to the browse page, even if we are not signed in, which is not right, and if, after sign-in, the user wants to go the login page we should not allow it (as the user is signed-in)
 
-when we are in / home page or login page changing the url to /browse we used to navigate which is not right .and if after the sign in user wants to go the 
-login page do not allow...
+SOLVING: Replacing the onAuthStateChanged to the header component as we know header is present everywhere so useEffect works fine in that. 
+Every time there is a change or reload, the Header is everywhere, so once we sign in /sign up it redirects us to the browse page and after signing out it redirects us to the login page
+// Thus no unauthorized access to other pages
 
-SOLVING   :replacing the onaUth change to the header component as we know header is present everywhere so useEffect works fine in that as everytime
------------             there is a change or reload the header is very everywhere so once sign in /sign up it takes us to the browse page and after sign out
-                            it takes to login in page
-
-in useEffect() return the function as when called
-because when the component unmounts we donot want any sort of change.
+// When the component unmounts we do not want any sort of change
+useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/browse"); 
+      } else {
+        navigate("/");
+      }
+    });
+    // Unsubscribe when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
 TMDB --movie database
   -Login
    -Edit profile
-   -API (left side)   find ur api key and api access token
+   -API (left side)   find ur API key and API access token
 
-go to movie list -now playing---on demo code const options is mandatory to pass everytime so keep it in constants.
-   NOTE::::::::      ALL the aPi calls happen as we wrap our APP in strictmode
-------------------
-Why happens twice?React does extra rendering to check the consistency of ur data
+go to movie list -now playing---on demo code, const options is mandatory to pass every time so keep it in constants.
 
-Browser
--------
+Why does everything(API calls) happen twice? (only happens in Dev mode, won't happen in build)
+Because our app is wrapped inside React.StrictMode, React does extra rendering to check the consistency of your data
 
+browse page structure
+---------------------
 -MAIN CONTAINER
   -VideoBackground
   -Video title
--SECONDARYCONTAINER
+-SECONDARY CONTAINER
  -MovieList *n
  -cards *n
 
- NOTE: there can be multiple trailers of one movie or no trailer if no trailer take the first vid of that particular movie and it trailer exits take trailer
+ NOTE: there can be multiple trailers of one movie or no trailer if no trailer take the first video of that particular movie and if trailer exists take trailer
 
- --MOVIElIST :POPULAR
+ --MOVIELIST: POPULAR
       -MOVIECARDS *N
- ---mOVIELIST:NOW playing
+ ---MOVIELIST: NOW playing
   |
   |
   |
   |
   (N)
 
-  Do tmdb image URL to get the CDN url
+  Do tmdb image URL to get the CDN URL
 
 
   OPENAI:platform.openai
