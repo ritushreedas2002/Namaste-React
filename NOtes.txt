@@ -1380,7 +1380,7 @@ const email = useRef(null);  // useRef() takes an initial value
 5. Write the logic for sign-in and sign-up
 6. Make a redux store of user slice -----
     6.1. For authentication handling go to onAuthStateChanged of firebase authentication docs(in Manage Users)
-         - onAuthStateChanged handles whenever there is an authentication state change in the user details (thus we don't need to manage a user in the redux store)
+         - onAuthStateChanged handles whenever there is an authentication state change(sign up/sign in/sign out) in the user details (thus we don't need to manage a user in the redux store)
 7. Inside useEffect (because we want to render only once after a state change), write the logic of auth change, and in sign-in in addUser to the redux store(Body.js) and in sign out remove User from the redux store
 8. Now in the header do a sign-out button and onClick an event occurs
 - From Firebase docs go to password authentication and go to sign out logic and if sign out navigate to the Login page(Login.js)
@@ -1419,6 +1419,37 @@ STEPS FOR DEPLOYMENT
 2. Initialize firebase - 'firebase init', then select Hosting
 3. Deploy command - 'firebase deploy'
 
+AN IMPORTANT ERROR
+------------------
+Uncaught runtime errors:
+×
+ERROR
+useNavigate() may be used only in the context of a <Router> component.
+THIS ERROR WILL SHOW UP IF YOU TRY TO USE THE useNavigate() HOOK OUTSIDE YOUR <Router> COMPONENT
+FOR E.G.- IN Body.js
+const Body = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();              //This is outside RouterProvider, so it won't work, it can only work inside RouterProvider, i.e. child components of Body.js
+  const appRouter = createBrowserRouter([
+    { path: "/", element: <Login /> },
+    { path: "/browse", element: <Browse /> },
+  ]);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {   
+      if (user) { navigate(...); } 
+      else { navigate(...); }
+    });
+  }, []);
+  return (
+    <div>
+      <RouterProvider router={appRouter} />
+    </div>
+  );
+};
+POSSIBLE SOLUTIONS ARE->
+1) Use window.location.href to navigate
+2) Move your routing i.e., appRouter out of your Body.js, and put in at the App level, i.e. App.js or index.js
+3) Don't use navigate() here, but use it in some other place, that is within RouterProvider
 
 ------------------------------------------------------------EPISODE 15 & 16-----------------------------------------------------------------------------
 FIXING BUG-
