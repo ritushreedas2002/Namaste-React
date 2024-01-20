@@ -1508,6 +1508,14 @@ browse page structure
 
   Do tmdb image URL to get the CDN URL
 
+ ** {movies?.map((movie) => (
+         <MovieCard key={movie.id} poster={movie} />
+    ))}
+    //optional chaining is extremely important, as initially, the value of movies was null, so .map property cannot execute, hence will throw an error
+ERROR->
+Unexpected Application Error!
+Cannot read properties of null (reading 'map')
+TypeError: Cannot read properties of null (reading 'map')
 
   OPENAI:platform.openai
   npm open ai---helper func to make api call directly
