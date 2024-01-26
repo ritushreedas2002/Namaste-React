@@ -219,12 +219,60 @@ const Body = () => {
 <div className='res-container' style={{background-color:"yellow";}}>   // writing the JS object directly
 //first { } telling there is some piece of JS inside it and second { } is the JS obj itself
 
+** Passing a Prop to a component is just like passing an argument to a function
+** React wraps up all the props together and passes them as an object to the required functional component
+** When you have to dynamically pass in some data to a component, you pass in as a prop
+** You can pass any no. of props you wish to, React will wrap them into an object
+
+const RestaurantCard = (props) =>{
+    return (
+        <div className="res-card">
+            <h3>{props.resName}</h3>
+            <h4>{props.cuisine}</h4>
+        </div>
+    );
+};
+
+const Body = () =>{
+    return (
+        <div className="res-container">
+            <RestaurantCard resName="Meghna Foods" cuisine="Indian"/>
+            <RestaurantCard resName="KFC" cuisine="Burger"/>
+            <RestaurantCard resName="Tabdoor's" cuisine="Arabic"/>
+        </div>
+    );
+};
+
+** You can also de-structure(JS concept) the object on the fly
+
+const RestaurantCard = ({resName,cuisine}) =>{
+    return (
+        <div className="res-card">
+            <h3>{resName}</h3>
+            <h4>{cuisine}</h4>
+        </div>
+    );
+};
+
+OR
+
+const RestaurantCard = (props) =>{
+    const {resName,cuisine} = props;
+    return (
+        <div className="res-card">
+            <h3>{resName}</h3>
+            <h4>{cuisine}</h4>
+        </div>
+    );
+};
+
 ----REAL DATA is in JSON format----------
 
-Conflict driven UI-open swiggy ->offers available in benguluru,kol all are different
-so for not building diff UI for different places
+** Config-driven UI -> opens swiggy with offers available in Bengaluru, Kolkata all are different
+** Config-driven UI means your UI is driven by a particular configuration based upon certain conditions
+It is necessary for not building diff UI for different places
 
-Conflict comes from backend
+Config comes from backend
 ---------------JSON------------------
 {
 "employee": {
@@ -237,44 +285,59 @@ Conflict comes from backend
 
 swiggy api:https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING
 
-DURING USING MAP:
---------------------
-we need to write key to uniquely identify the elements:
+** const {cloudinaryImageId, name, avgRating, cuisines, costForTwo, deliveryTime} = resData?.data;  // this question mark(?) is called optional chaining
 
-                  CONTAINER  
-  ---------------------------------------                     
+** DURING USING MAP:
+--------------------
+we need to write a key to uniquely identify the elements:-> Each child in a list should have a unique "key" prop. "key" is a reserved keyword.
+
+                CONTAINER (root) 
+     ----------------------------------                   
      |               |                |
 1.component1    2.component2    3.component3
-suppose you want to insert a component before component1 this is where key is important
-key is also important as it will not re-render everything again,
+suppose you want to insert a component before component0 in the first place, this is where the key is important
+key is also important as because of it, React will know which component is new, and it will not re-render everything again, otherwise, React won't know which component came at which position, and it will clean the container, and re-render everything (as it considers all the components as same)
 
-When React renders a list of elements, it needs a way to uniquely identify each item in the list. The key prop provides 
+When React renders a list of elements, it needs a way to identify each item in the list uniquely. The key prop provides 
 a hint to React about the identity of each element. This is especially important when the list can dynamically change, such as 
 when items are added or removed.
+
+** Keys optimize our code heavily (big performance enhancement)
 
 data.map((rest,index) => (
     <ResCard key={index} data={rest} />   //key is to identify each card as unique
 ))
-//INDEX is not recommended by React itself
+//INDEX is not recommended by React itself to be used as keys
+
+// not using keys (not acceptable) <<<< index as key <<<<<<<< unique id (best practice)
 
 -------------------------------------------------EPISODE 5--------------------------------------------------------------------------------
-src folder-has the source code
-in src folder
+src folder has the source code
 
-ALL hard coded data like links and dummy data are placed in another folder called utils
+** keep all your components in the 'components' folder
+
+** It is better to always name the file the same as the component it contains, like the Header component in the Header.js file
+** Before you can import a component, you have to export that component from the file it resides in
+
+import Header from "./components/Header"; is the same as import Header from "./components/Header.js"; or import Header from "./components/Header.jsx"; based upon what extension you give to your file because React will treat it as a JS file by itself
+
+** ALL hard-coded data like links and dummy data are placed in another folder called 'utils' or 'common' or 'config' and not in the 'components' folder
+you can keep your constant links in the constant.js file (small c denotes it is not a component)
 
 Types of EXPORT/IMPORT 
-1.default (Components)
--------export default (name)
---------import (name) from './filename'
+1. Default (Components)
+--------export default component_name;
+--------import component_name from './path_name';
+** In one file, you can only have one default export
 
-2.Named (multiple exports)
---------export const name=
---------export const name2=
---------import {name} from './filename'
+2. Named (for multiple exports)
+--------export const constant_name = // write the constant value
+--------export const constant_name2 = // write the constant value
+--------import {name, name2} from './path_name';
+** A good practice is to keep default export for components, but you can do named export for components also
 
+Default export can be done with the named export in this format:---------------
 
-Default export can be done with the named export in thsi format:---------------
 // Named export
 export const myFunction = () => {
   // ... function implementation
@@ -284,46 +347,59 @@ export const myFunction = () => {
 const MyComponent = () => {
   // ... component implementation
 };
-
 export default MyComponent;
 
-onClick takes a call back function 
+onClick takes a call-back function 
 ----------
-onClick{()=>{}}
-
+<button className="filter-btn" onClick={()=>{}}>Top Rated Restaurants</button>  
+/*button has an onClick attribute, which takes in a callback function(this is the function that will be called on click) */
 
 REACT HOOKS  (//import from react as a named import)
+===========
+NOTE: when we change a normal variable it does not affect the UI so we use the Hooks.
+Hooks are normal JS functions given by React for specific use cases. They have superpowers used for DOM manipulation
+These are the utility functions given by React. The two important hooks are : useState() and useEffect()
 
-NOTE:when we change a normal variable it does not affect the UI so we use the hooks
-are normal js function given by react which have super powers used for DOM manipulation
-these are the utility function given by react.The two imp hooks are :useState() and useEffect()
+useState() - gives you a superpowerful React variable that keeps sync of the data layer and UI layer
+** import { useState } from "react";
+useState() is used to create a State variable (it maintains the state of your component)
+whenever you call the useState() function, it gives a state variable, which you must receive.
+const [listOfRestaurants] = useState([]); // listOfRestaurants receives the array returned by useState(), whatever we pass inside useState() becomes the default value of the State variable, [] (empty list) in this case
 
-useState()-basically gives u super power react variable  keeps sync of data layer and UI layer
 const [listOfRestaurants, setListOfRestaurants] = useState(reslist);
-           |                     |                         |
-        default            what to be placed           default value[array of objects]
-                           when an event occurs
+           |                       |                           |
+     main variable          what to be placed           default value[array of objects]
+                           when an event occurs          of main var
+                    (preferred convention to add set
+                      before the main variable name)
+                    ** Updates the main variable, and
+                      reflects the changes in the UI
 
 setListOfRestaurants(filteredList);
-means that listOfRestaurants=filteredList; after onCLick eventListerner
+means that listOfRestaurants = filteredList; after onCLick eventListener
 
-this will filter out those restaurants having rating more than 4 and sets the listOfRestaurants
-This is called re-rendering. When a state variable changes react re-renders its omponents. As soon as the list of restaurants updates,
- react will very quickly removes the past data and updates with the new data.
+this will filter out those restaurants having a rating of more than 4 and sets the listOfRestaurants to filteredList
+This is called re-rendering. When a state variable changes react re-renders its components. As soon as the list of restaurants updates,
+React will very quickly remove the past data and update the UI with the new data.
+The logic of re-rendering is basically updating the UI
 
- const arr=useState(reslist);     //array destructuring//useState is returning an array
- const listOfRestaurants=arr[0];
- const setListOfRestaurants=arr[1];
+ const arr = useState(resList);     //array destructuring //useState is returning an array
 
-"const " data type actually we cannot change the value  but how it is possible?
-When we update the value by assigning new value to setListOfRestaurants then the useState() actually rerenders the whole component 
-so a new valu eis assigned to listOfRestaurants.
-  
+ const [listOfRestaurants, setListOfRestaurants] = arr;
+OR
+ const listOfRestaurants = arr[0];
+ const setListOfRestaurants = arr[1];
 
-Reconciliation Algorithm(React Fibre)
-------------------------------------------
+** useState() always returns an array of 2 parameters, first is the initial value assigned to a variable, second is the setter function used to change/update the original variable
 
-Actual DOM              Virtual DOM is the representation of the actual DOM, it is nothing but an js object
+** In the "const" data type we cannot change the value, but how is it possible?
+When we update the value by assigning a new value to setListOfRestaurants then the useState() actually rerenders the whole component 
+so a new value is assigned to listOfRestaurants.
+
+Reconciliation Algorithm(also known as React Fibre)
+---------------------------------------------------
+
+Actual DOM (only code)             Virtual DOM is the representation of the actual DOM, it is nothing but the JS object
 <div>
   <div>
     <h1/>
@@ -333,37 +409,38 @@ Actual DOM              Virtual DOM is the representation of the actual DOM, it 
 DIFF Algorithm
 -----------------
 
-It will actually cal the difference between the previous obj and the updated obj then it actuallys  changes the DOM and
-renders it at every render cycle. whenever there is a change in state variable there is a change in DOM and react re-renders.
+It will calculate the difference between the previous obj and the updated obj then it changes(updates) the DOM and renders it at every render cycle. 
+Whenever there is a change in state variable there is a change in DOM and react re-renders.
 
 React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
+** Finding out the difference between two HTML codes is tough, Finding out the difference between two objects (virtual DOM) is fast
 
 --------------------------------------------------------------EPISODE 6--------------------------------------------------------------------------------
 
 Architecture---
 ------------------
 
-1.MONOLITH Architecture (Suppose this is a JAVA PROJECT and we are doing everything in that project)
+1. MONOLITH Architecture (Suppose this is a JAVA PROJECT and we are doing everything in that project)
 
-----------------------
-| API   UI     AUTH   |  (JAVA PROJ)  (only writtern in java)
+|---------------------|
+| API   UI     AUTH   |  (JAVA PROJ)  (only written in Java)
 | DB     SMS          |
 |---------------------|
 
-2.MICROSERVICES
+2. MICROSERVICES
 
-Different services for diff jobs    
----------------------------|
+Different services for different jobs    
+|--------------------------|
 |                          |
 |  |API|     |UI|   |DB|   |(theses services are independent of each other and interacts in some use cases)
-|                          |     (ALl these small application are performed separately following separatio  of concerns (single responsibility principle))
+|                          |     (All these small applications are performed separately following the separation of concerns (single responsibility principle))
 |   |AUTH|   |SMS|         |
-| ---------------- ------- |
+|--------------------------|
 
-HOW do these services interact with each other?
-these services interact with each other through diff cases. They make call to diff microservices.
-Our react project comes into UI  microservices. ADVANTAGE: is that UI can be writtern in react, backend can be writtern in mongodb 
-so  mainly diff microservices can be writtern in different languages. They run in their own ports. eg UI:1234 , Backend:1022 and all these
+How do these services interact with each other?
+these services interact with each other through different cases. They make calls to different microservices.
+Our react project comes into UI  microservices. ADVANTAGE: is that UI can be written in react, backend can be written in Mongodb 
+so  mainly different microservices can be written in different languages. They run in their own ports. eg UI:1234, Backend:1022, and all these
 ports are mapped to their domain name.  
 
 
@@ -371,89 +448,101 @@ TWO APPROACHES OF API CALL :
 ---------------------------------
 1.
 LOADS --> API CALL(takes 500ms)-->Renders it in UI
-(as soon as the page loads we make an api call ,the api response and we render it )
+(as soon as the page loads we make an API call, the API response and we render it )
 (poor user experience as we need to wait for 500ms)
 
 2.
 LOADS --> RENDERS -->API CALL --->RE-RENDERS
-(as soon as the page loads we render it then we make an api call ,the api response and we re-renders it )
+(as soon as the page loads we render it then we make an API call, the API response and we re-render it )
 (Best approach)
 
 useEffect() hook 
 -------------------------
-it takes two arguments 1.callback function 2.dependency array
-As teh body loads it loads the whole body as the render cycle gets over, it calls its callback function.(useEffect gets called after the component
-has been rendered)
+it takes two arguments:- 1. callback function 2. dependency array
+After the whole component loads, and the render cycle is over, it calls its callback function. 
+(useEffect's callback function gets called after the component has been rendered, as soon as the render cycle has finished)
 
 eg.
 -----
 useEffect(()=>{
-  console.log("HII");
+  console.log("HII");   // this will be called after the whole Body component's render cycle has finished
 },[]);
- console.log("Ritu");
+ console.log("Ritu");   // this will be called during rendering Body component 
 
  console
  ----------
  Ritu
  HII
 
-CORS: mainly our browser or local host restricts the use of another host
+const fetchData = async () => {
+    const data = await fetch( "API" );     // this fetch() is provided to us by the browser or the JS engine,  it fetches data from the API, and this fetch() will return a promise
+    const json = await data.json();
+};
+//You can handle a promise by either using .then - .catch or by using async - await(modern approach)
 
-how to find api? : go to website ->inspect->network->click on fetch option->left side column api are given
+CORS policy: mainly our browser is not allowing us to call Swiggy's API from the local host, it restricts the calling of an API from one origin to another origin
 
-Suppose instead of showing Loading page while the api does response and re-renders we can show shimmer UI which is basically the shadow of the whole
-original UI.
+how to find API? : go to website ->inspect->network->click on fetch option->left side column API are given
+
+Suppose instead of showing the Loading page while the API does response and re-renders we can show a spinning loader or shimmer UI which is the shadow of the whole original UI.
 
 const [button,setbutton]=useState("Login");
-how const variable is changes?
-so when we setbutton actually react ensures to find the diff between the previous vitual DOM and the modified virtual DOM and then re-renders the 
+
+how the const variable is changed?
+so when we click "Login", setbutton function executes, and React ensures to find the difference between the previous virtual DOM and the modified virtual DOM and then re-renders the 
 component once again, so again a new button variable is created with the modified value.
+** And this is why we need a State variable because a normal variable would only change its value without affecting the UI, but for a State variable, the data layer and the UI layer are closely connected, thus reflecting the changes in sync with one another.
 
 const [searchtext, setsearchtext] = useState("");
 <input type='text' className='search-box' value={searchtext}></input>   
-to keep track of the input we need to bind it with the local state variable .
-NOTE: when at each keystroke the nothing shows in input text this is because .... the value is bind to seacrtext and the value is bind to input type
-so at at change the value still remain ""
+We need to bind the input with a local state variable to keep track of the input that the user types in.
 
-so we need to add onChange event handler :---that as the input changes we are changing the seachtext value
-at each key stroke the react component gets render again and again
-whenever a state variable updates,react tru=iggers a recoincilation cycle.
+NOTE: when at each keystroke nothing shows in the input text this is because .... the 'value' is tied/bind to 'searchtext' and the 'input' box is tied/bind to the 'searchtext'
+so even if we try to change the value in the input box, it still remains the same as the searchtext is still ""
+
+** So we need to add an onChange event handler:---so that as the input changes, the searchtext value also changes 
+at each keystroke, the react component gets rendered again and again
+
+** Whenever a state variable updates, react triggers a reconciliation cycle(re-renders the component).
+React is re-rendering the whole component but it is only updating the input box value inside the DOM
+
+** React is so fast because it does DOM manipulation with high efficiency, because of the new reconciliation algorithm, whenever React has to re-render a component, it only updates the part that is getting changed by comparing the past and present virtual DOM
 
 NOTE:
 -------
 const [listOfRestaurants, setListOfRestaurants] = useState([]);
 const [filteredlistOfRestaurants, setfilteredListOfRestaurants] = useState([]);
 
-we are keeping intact the main list of restaurants that is listOfRestaurants and on every change we are manipulating filteredlistOfRestaurants
-so that the main list of restaurants keeps intact
+we are keeping intact the main list of restaurants, that is, listOfRestaurants, and on every change, we are manipulating filteredlistOfRestaurants
+so that the main list of restaurants remains intact otherwise if our main list gets updated, then for all the following searches after that, it will search only within the updated list, and not the original list
+this way we never update our original list of restaurants, i.e., listOfRestaurants, except for the first time, while fetching data from the API
 
 --------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
+
 useEffect
 ------------
-useEffect(()=>{})
-1. if no dependency, then useEffect will be called at every render of the component.
-2.useEffect(()=>{},[])if dependency is empty array, then useEffect will be called at first render of the component.
-3.useEffect(()=>{},[btnname])if dependency is not an empty array, then useEffect will be called when the btnanme variable gets updated
-
+1. useEffect(()=>{}), if no dependency array is given, then useEffect will be called at every render of the component.
+2. useEffect(()=>{},[]) If the dependency is an empty array, then useEffect will be called at the first render of the component(just once).
+3. useEffect(()=>{},[btnname]) If the dependency is not an empty array, then useEffect will be called when the btnanme variable gets updated
 
 useState
 -----------
+useState() is used to create local state variables inside your functional component (so always call it inside your functional component, and always call it at the top of your component(preferred))
+NOTE: do not create state variables inside conditional statements(if-else)(otherwise it creates inconsistencies) or for loops or functions.
 
-useState() is used to create local state variables inside your functional component
-NOTE: do not create state variables inside conditional statements or for loop or functions.
-------
-
+** npm i -D react-router-dom
 npm react-router-dom is installed to access the router facility to enhance the multi-page concept
-e.g if i write /about in url we will redirect to about us page
+e.g if I write /about in url we will redirect to the about us page
 
-createBrowserRouter creates an Router configuration
---------------------- 
-createBrowserRouter([{},{}]) takes a list of object where each object is given it s path and the element to be rendered at that specific path.
+createBrowserRouter() creates an Router configuration(means some information that will define what will happen on a specific route)
+---------------------
+createBrowserRouter([{},{}]) takes a list of objects where each object is given its path and the element to be rendered at that specific path.
 
-RouterProvider is used to provide the createBrowserRouter
-----------------
+RouterProvider is used to provide the createBrowserRouter and change pages based on the required path
+--------------
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
-const appRouter=createBrowserRouter([
+ 
+const appRouter = createBrowserRouter([
   {
     path:"/",
     element:<App/>
@@ -469,6 +558,16 @@ root.render(
  <RouterProvider route={appRouter}/>
 );
 
+** rafce -> shortcut for creating basic functional components and exporting them
+
+** 'react-router-dom' already provides a default error page for you, which is used in case some other error page is not created explicitly
+
+** Another important hook is useRouteError, which gives more details about the different types of errors that can occur
+import { useReactError } from 'react-router-dom';
+
+you can catch the error like this ->
+const err = useReactError();   // this returns an object that contains all the details of the error that occurs in the current page
+console.log(err);
 
 Another approach:
 -------------------
@@ -491,9 +590,9 @@ root.render(
   </Router>
 );
 
+** Now suppose I want my Header component to constantly show across different pages
+then I have to make the other pages as the children of the AppLayout component, as it contains the Header component in itself
 
-now suppose i want my header component to be a constant :
-so 
 import { createBrowserRouter,RouterProvider,Outlet } from 'react-router-dom';
 const AppLayout =()=>{
   return(
@@ -507,21 +606,13 @@ const appRouter=createBrowserRouter([
   {
     path:"/",
     element:<AppLayout/>,
-    errorElement:<Error/>
+    errorElement:<Error/>,
     children:[
-      {
-    path:"/about",
-    element:<About/>,
-    errorElement:<Error/>
-    },
-    {
-    path:"/contact",
-    element:<Contact/>,
-    errorElement:<Error/>
-    }
-  ]
- }
-  
+      { path:"/", element:<Body/>, errorElement:<Error/> },
+      { path:"/about", element:<About/>, errorElement:<Error/> },
+      { path:"/contact", element:<Contact/>, errorElement:<Error/> }
+    ]
+ }  
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -529,26 +620,32 @@ root.render(
  <RouterProvider route={appRouter}/>
 );
 
-now when path "/" is rendered the <AppLayout/> is rendered in place of <Outlet/>
+now when path "/" is rendered the <Body/> is rendered in place of <Outlet/>
 now when path "/about" is rendered the <About> is rendered in place of <Outlet/>
-so the header component remains intact and below that we add the outlet....
+so the Header component remains intact and below that we add the outlet...
 
-by clicking on about it moves to about page using <a> anchor tag it reloads the whole page which is a bad practice so we use the <link> tag
-from react-router-dom. It is a wrapper of teh <a> tag
+so whenever there is a change in the path, this Outlet will be filled with the children acc to the path
+
+by clicking on 'About', it can move to the 'About' page using <a> anchor tag, which reloads the whole page(thus takes longer), which is bad practice, so we use the 'Link' component(it does not reload the whole page fully) from react-router-dom. It is a wrapper of the <a> tag, though which 'react-router-dom' keeps a track of this link.
+import { Link } from 'react-router-dom';
+
+** So whenever you are navigating to a different route, always use a Link component
 
 Routing
 ----------
-1.Client Side Routing -  we are not making any sort of network call, rather we are doing changing of components as about, contact 
-component already loaded in your local host.When we go to aboutus page it loads the about component
+1. Client-Side Routing -  we are not making any sort of network call, rather we are doing changing of components as about, contact 
+component already loaded in your local host. When we go to 'About us' page it loads the about component
 
-2.Server Side Routing - When the local host, makes a network call fetches the data for AboutUS page and reloads the page.
+2. Server Side Routing - When the local host makes a network call, it fetches the data for the About us page and reloads the page.
 
 Dynamic Routing :
-where fr each restaurant another page will be created
-path="/restaurant/:resId" so this resId  is dynamic
+-----------------
+where for each restaurant different page will be created
+path: "/restaurant/:resId" so this resId  is dynamic, defined by a : in front
 
 useParams from react-router-dom is used to find the id of the various dynamic routing.Params is a object with the unique id
-e.g-http://localhost:3000/restaurants/78511 ,useParams fetches the id :78511
+useParams returns an object which contains the resId property(resId is the dynamic route part that you passed in the createBrowserRouter)
+e.g-http://localhost:3000/restaurants/78511, useParams fetches the id :78511
 
 which further is used for dynamic routing
 
@@ -557,23 +654,105 @@ Dynamic Routing:
 Dynamic routing refers to the practice of generating routes dynamically based on certain parameters or data
 e.g:<Route path="/user/:userId" element={<UserProfile />} /> userId keeps chaging according to individual ids.
 
+** DO NOT USE TERNARY OPERATOR EVERYWHERE, AS YOU MAY RUN INTO UNWANTED ERRORS,
+ONE SUCH SITUATION IS IF YOU ARE INITIALISING A STATE VARIABLE WITH NULL, AND LATER UPDATING IT WITH AN OBJECT WHICH IS FETCHED FROM SOME API
+THEN IF YOU WANT TO ACCESS A PROPERTY OF THAT OBJECT, THE FOLLOWING ERROR MAY SHOW:-
+TypeError: Cannot destructure property 'name' of '(intermediate value)' as it is undefined.
+AS THE REQUIRED PROPERTY CANNOT BE EXTRACTED INITIALLY WHEN THE VARIABLE IS NULL
+E.G.-
+
+const [resInfo, setResInfo] = useState(null);
+
+useEffect(() => {
+    fetchMenu();
+  }, []);
+
+const fetchMenu = async () => {
+    const data = await fetch(
+      MENU_API + resId + "&catalog_qa=undefined&submitAction=ENTER"
+    );
+    const json = await data.json();
+    console.log(json);
+    setResInfo(json.data);
+ };
+
+const { name, cuisines, costForTwoMessage } =
+    resInfo?.cards[0]?.card?.card?.info;
+
+  const { itemCards } =
+    resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
+  console.log(itemCards);
+
+  return resInfo === null ? (
+    <Shimmer />
+  ) : (
+    <div className="menu">
+      <h1>{name}</h1>
+      <h2>{cuisines.join(", ")}</h2>
+      <h3>{costForTwoMessage}</h3>
+      <ul>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - Rs.{item.card.info.price / 100}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default RestaurantMenu;
+
+INSTEAD YOU MUST DECLARE THE ALTERNATE CONDITION SEPARATELY IN A IF CONDITION:-
+
+if (resInfo === null) {
+    return <Shimmer />;           // SHOW THIS BEFORE DESTRUCTURING THE OBJECT, SO THAT DESTRUCTURING IS ONLY DONE WHEN THE OBJECT IS NOT NULL
+  }
+const { name, cuisines, costForTwoMessage } =
+    resInfo?.cards[0]?.card?.card?.info;
+
+  const { itemCards } =
+    resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
+  console.log(itemCards);
+
+  return (
+    <div className="menu">
+      <h1>{name}</h1>
+      <h2>{cuisines.join(", ")}</h2>
+      <h3>{costForTwoMessage}</h3>
+      <ul>
+        {itemCards.map((item) => (
+          <li key={item.card.info.id}>
+            {item.card.info.name} - Rs.{item.card.info.price / 100}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+** ANOTHER IMPORTANT ERROR WHILE FETCHING DATA FROM SOME EXTERNAL API IS:-
+TypeError: Cannot read properties of undefined (reading 'length')
+THIS OCCURS WHEN YOU WANT TO RENDER A LIST OF ELEMENTS(OBJECTS), BUT THE VARIABLE IN WHICH YOU WANT TO ASSIGN THE LIST,
+HAS BEEN ASSIGNED SOME OTHER OBJECT INSTEAD OF A LIST, THUS SHOWING THIS ERROR
+BECAUSE A LIST ALWAYS HAS A LENGTH PROPERTY
 
 --------------------------------------------------------------EPISODE 8------------------------------------------------------------------------
 
 CLASS BASED Component
 -------------------------
 
- <UserClass name="Ritushree Das" location ="Address"/>
- ALl the props u have passed will bind into a single object ...
+ <UserClass name={"Ritushree Das"} location ={"Address"}/>
+ All the props you have passed will bind into a single object ...
 
-import React from "react";
+import React from "react";                       // React.Component class is given to us by React
 import "./User.css";
-class UserClass extends React.Component{
-    constructor(props){
-        super(props);        and then the obj will be passed to the Component
+class UserClass extends React.Component{         // this 'extends React.Component will let React know that this is a class-based component
+    constructor(props){                          // in class-based components, the constructor receives the props
+        super(props);                            // and then the obj will be passed to the Component
     }
 
-    render(){
+    render(){                                   // this render() method will return a piece of JSX which will be displayed onto our UI 
         return <div className="User-card">
             <div>NAME :{this.props.name}</div>
             <div>Location:{this.props.location}</div>
@@ -584,40 +763,76 @@ class UserClass extends React.Component{
 
 export default UserClass;
 
-----------NOTE: we can also write ------------------
+** In functional component, the arrow function returns a piece of JSX, in class-based components, the render() method returns a piece of JSX
+
+Why do we need to write super(props) in class-based components?
+---------------------------------------------------------------
+In React, you need to write super(props) in the constructor of a child component to call the constructor of the parent component. This is necessary because React uses a class hierarchy to render components, and each child component inherits the properties and methods of its parent component. By calling super(props), the child component is able to access the properties and methods of its parent component.
+If you do not write super(props) in the constructor of a child component, React will throw an error. This is because React needs to be able to access the properties and methods of the parent component in order to render the child component.
+We might require props inside the child component constructor with this keyword. super() function calls the constructor of the parent class. Using super constructor with props arguments basically allows accessing this.   // use of 'this' keyword
+
+
 class UserClass extends React.Component {
-  render() {
+  constructor(props) {             // constructor is always called at first, whenever an instance of that class is created, thus it is preferred to declare the state variables inside it
+    super(props);
+    this.state = {                     // this.state is a large object that contains all the state variables (in functional components, even though we declare multiple state variables 
+      count: 0,                           separately, but behind the scenes, React manages a large object for all the state variables like this)
+      count2: 2                        // creating state variable is always inside the constructor
+    }
+  }
+
+  render() {  
+    const {name} = this.props;           // destructuring this.props
+    const {count, count2} = this.state;  // destructuring this.state
     return (
-      <div className="User-card">
-        <div>NAME: {this.props.name}</div>
-        <div>Location: {this.props.location}</div>
-        <div>Contact Us: @ritz.das</div>
+      <div className="user-card">
+        <h1>Count : {count}</h1>
+        <h1>Count2 : {this.state.count2}</h1>
+        <h1>Name : {name}</h1>
+        <h2>Location : Kolkata</h2>
+        <h3>Contact : arpandesp@gmail.com</h3>
       </div>
     );
   }
 }
 
-export default UserClass;
-------------------------------------------------------------------------------------------------------------------
+** NEVER UPDATE STATE VARIABLES IN CLASS-BASED COMPONENTS DIRECTLY
+use this.setState() for this purpose
 
-creating state variable is always inside constructor
----now when About.js is mounted/loaded in the web page it then goes through the jsx line by line and when it sees that the UserClass Component
-is called an instance of component or the component is initialised.
+    <button
+          onClick={() => {
+            this.setState({                    // we pass an object inside this.setState(), which contains the updated value of the state variables
+              count: this.state.count + 1,     // you can also update some other state variables inside this this.setState(), if necessary(updating simultaneously)
+            }); 
+          }}
+        >
+          Increase count
+    </button>
 
-LifeCycle
------------
-Parent Constructor-->Parent Render-->Child Constructor --->Child Render
 
-componentDidMount(){
-  console.log("HII MOUNT");
+---now when the About component is mounted/loaded in the webpage it then goes through the JSX line by line and when it sees that the UserClass Component, it then starts loading the UserClass component, and an instance of the component is created, which calls its constructor at first, and then the render() method.
+
+LifeCycle of Hierarchical Class-based Component(both parent & child are Class-based Component)
+----------------------------------------------------------------------------------------------
+Parent Constructor-->Parent Render-->Child Constructor-->Child Render
+
+componentDidMount(){           // this componentDidMount() method executes only when the component inside which it is declared, actually mounts on our webpage, i.e., 
+  console.log("HII MOUNT");       // constructor --> render() --> componentDidMount()
 }
+
+Parent Constructor-->Parent Render-->Child Constructor-->Child Render-->Child Component did Mount-->Parent Component did Mount
+//once the child component is mounted successfully then the parent component is finished mounting
+
+** An important use case of componentDidMount() is to make API calls because we don't want to wait for the result of the API call, thus we render our class component quickly at first, then receive data from the API call and then re-render it
+
+** Because of this same reason, we make API calls in functional components using useEffect(), which is called once the component has been loaded
 
 now first when UserClass is loaded the sequence of loading follows:
 1.Constructor
 2.render
 3.componentDidMount
 --------------------------------------------
-now suppose if About.js is a class based component --->calling--->UserClass which is also a class Based component
+now suppose if About.js is a class-based component --->calling--->UserClass which is also a class Based component
 Calling sequence---
 1.Parent Constructor
 2.Parent render
@@ -627,701 +842,70 @@ Calling sequence---
           3.child componentDidMount
 3.Parent componentDidMount
 ------------------------------------------------
+
+** FOR MULTIPLE CHILDREN OF PARENT CLASS
+
+class About extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("Parent Constructor");
+  }
+  componentDidMount() {
+    console.log("Parent componentDidMount");
+  }
+  render(){
+    console.log("Parent render");
+    return (
+      <div>
+        <h1>About</h1>
+        {/* <User name={"Arpan De USER"}/> */}
+        <UserClass name={"Arpan De USERclass"}/>      //Child 1
+        <UserClass name={"Another Guy USERclass"}/>   //Child 2
+      </div>
+    );
+  }
+}
+
+Flow will be->
+--------------
+Parent Constructor
+Parent render
+    Child 1 Constructor
+    Child 1 render
+    Child 2 Constructor
+    Child 2 render
+    Child 1 componentDidMount
+    Child 2 componentDidMount
+Parent componentDidMount
+
 LIFECYCLE 
 ----------------
-2PHASES:
-1.render phase (is fast)
-in render phase --first constructor called then render method
+2 PHASES:
+1. Render phase (is fast)
+in the render phase -- first constructor is called then the render method
 
-2.Commit phase (is slow)
-after all the updation in DOM through render phase then DidMount is called
-so DidMount is the place where API is called.
+2. Commit phase (is slow) (bec updating the DOM is an expensive task)
+after all the updation in the DOM through the render phase then DidMount is called
+so DidMount is the place where API is called. 
+DOM is also updated in a single batch, after calculating the DIFF of all the elements in the virtual DOM
+
+** REACT DOES CODE OPTIMIZATION BY BATCHING THE RENDER PHASE OF ALL THE CHILD COMPONENTS TOGETHER, AND THEN THE COMMIT PHASE
+THUS IF A PARENT COMPONENT HAS MULTIPLE CHILD CONSTRUCTOR, ONLY THE RENDER PHASE (CALLING CONSTRUCTOR + CALLING RENDER) OF ALL ITS CHILDREN ARE COMPLETED FIRST
 
 -------------MOUNTING CYCLE---------------
 -Constructor(dummy data)
 -Render (dummy data)
       <HTML dummy>
-componentDidMount
+-componentDidMount
       <API CALL>
-      this.setstae--->state variable updated
+      <this.setState>--->state variable updated
 
 ----------UPDATING CYCLE------------
--   render(API data)
-     <HTML (new api data)/>
+-Render(API data)
+     <HTML (new API data)/>
 -componentDidUpdate
---------------UNmounting cycle---------
+
+--------------UNMOUNTING CYCLE---------
 -componentWillUnmount
+       this is called just before unmounting the component
        this will be called when we go to another page
-
-
-----------------------------------------------------EPISODE 9---------------------------------------------------------------------------------
-
-
-CUSTOM HOOKS
-----------------
-A user created Hook which is a utility function.
-Naming convention:write the component starting with "use"
-
-Now to move offline go to inspect-->network-->then in drop down no throtting to offline
-
-----DYNMAIC BUNDLING--------
-Dynamic bundling or chunking, often referred to as code splitting, is a technique used in web development to improve the performance
- and loading time of a web application. The idea is to split the JavaScript code into smaller "chunks" or "bundles" and load them on-demand, 
- instead of loading the entire JavaScript code at once. This is particularly useful for large-scale applications where the initial download size
-  can be substantial.
-
-  -----LAZY LOADING/(ON-demand Loading)----------
-  Lazy loading is a technique used in web development to defer the loading of certain assets (such as images, scripts, or stylesheets) until they are
-   actually needed.
-   when our app loads the grocery does not loads, when we go to grocery at that point it loads
-   -----Lazy() is a named export given by react
-    -It takes a callback function calling import() function and inside import function taking the path of the grocery
-    so making grocery having its own bundle and and the main bundle is different(app.js)
-   ----Suspense------
-    <Suspense fallback={<Shimmer />}><Grocery /></Suspense>
-    Suspense is writtern as without it an error occurs as when our app loads it trys t load Grocery but cannot so we need to write suspense fallback 
-    whick shows what to be loaded in absence of Grocery
-
-
-------------------------------------------------------EPISODE 10---------------------------------------------------------------------------------
-Other ways of writing css--
-1.sass 2.scss 3.styled component
----------LIB-----------------------
-MAterialUI library (in react)
-ChakraUI 
-Bootstrap
-ant design
-----------------------------------
-Tailwind css works with various frameworks,normal HTML..and so on
-Taiwind css usus postcss behind the scene .(Postcss is a tool for transforming js to css)
-
-npx tailwindcss init -----it will create a taiwind.config.js
-content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
-  telling tailwind can be used in js file,jsx file ans so on
-  in tailwind, everything happens related to class name
-
-  Dynamic classes in tailwing w-[200px]
-  Disadvantage of taiwindcss-
-  1. it makes the code look ugly
-  2. it becomes messy to handle 
-
-  Advantages--
-  1.t is very light-weight 
-  as if we write 10 times m-4 it jst take it as once
-
-  -------------------------------------------------EPISODE 11_---------------------------------------------------------------------------------
-
-  HIGHER ORDER COMPONENT--a function that returns another function
-
-  it basically used for enhancement suppose in the body component we want some cards to be labelled as promoted by our app.
-  NOTE: as promoted not in the API so making every rescard id which is divisible by 5 as promoted.... 
-
-
-
-  ----UI APPLICATION-----
-  1.UI LAYER
-  2.DATA LAYER
-
-  UI LAYER GETS POWERED BY DATA LAYERED
-  (Data layer consits of props,state variables ...etc) (/*Major thing is to handle data layer*/)
-
-  FILTER----out all the item categories and enhance the individual restaurant menu
-  @ is not supported so we need to write ["@type"] or [@type]
-  The format of the categories (UI) is called ---"Acordian
-
-  ----REACT DEVELOPER TOOLS-----
-  featues----
-  1.Components
-        it shows the component hierarchy of the system
-  2.PROFILER
-        it mainly records ur actions and after stop recording it shows the components invoked
-  
-  -----------CONTROLLED AND UNCONTROLLED Components--------LIFTING THE DATA-------------
-    RestaurantMenu is controlling the Restaurant Category as for suppose there are 4 categories and suppose if we expand recommended category all 
-    other categories must collapse.
-
-    This is called lifting the data as the control is on the hands of the parent not in the child
-
-    UNCONTROLLED---when restaurant category has its own state 
-
-    CONTROLLED COMPONENT FULL EXPLANATION 
-    -------------------------------------------
-    RestaurantMenu.js(PARENT)
-    -----------------------------
-
-    const [showIndex,setShowIndex]=useState(0);
-     {categories.map((category,index)=>(
-                <RestaurantCategory key={category?.card?.card.title} 
-                data={category?.card?.card} 
-                showItems={index===showIndex?true:false}      //we are setting which category items to be showed 
-                setShowIndex={()=>setShowIndex(index)}/>      
-     ))}
-     By default category 0 is always showed with their items as showIndex initially 0.
-    showIndex is controlling which category to showed if category 0 is opened automatically other categories get closed 
-    on clicking on other categories the setShowIndex function is called which returns set the showIndex with its index value then
-    showItems gets equal to the actual index value and the index of the category  clicked which changes that particularly
-    category to true which means that category will show its items and other will not show their items
-
-
-    RestaurantCategory.js (CHILD)
-    -------------------------------------
-
-    const RestaurantCategory=({data,showItems,setShowIndex})=>{
-        const handleClick=()=>{
-          setShowIndex();
-      }
-      return (
-        <div>
-            <div className="flex justify-between cursor-pointer "onClick={handleClick}>
-            {showItems&&<ItemList items={data.itemCards}/>}
-        </div>
-    )
- }
-
- Basically what happens on cLick of category it calls the setShowIndex() function which modifies the parent RestaurantMenu 
-
- LIFTING THE STATE UP ---PARENT CONTROLLING ITS CHILDREN
-
-----------PROPS DRILLING--------------
- IN REACT,passing data through components is a tough work. So data flow is a one way. parent->children->children
- root->children->children->ans so on
- Now suppose I want to pass the data to the last children so we need to move the data between its intermediate parents.
-
- In that case we useContext  so that we can pass the data directly.
- Because COntext is an approach like a global data is placed and any one can access it when needed. 
- eg-logged in user info, or the theme (light or dark theme)
-
- createContext used for making a global data.
- useContext used for using the global data.
- const data=useContext(useContext);
-
-
- In class based components
- <userContext.Consumer>
- {(data)=>console.log(data)}       it takes a callback function which take data that the global data
- </userContext.Consumer>
-
- or more destructuring---
- <userContext.Consumer>
- {({loggedInUser})=>console.log(loggedInUser)}       it takes a callback function which take data that the global data
- </userContext.Consumer>
-
- ------To modify the data and make the data accesible to all the other components we use userContext.Provider ------
-  const [userName,setUserName]=useState();
-  useEffect=(()=>{
-   //API CALL;
-   const data={
-    name="Akshay Saini"
-   }
-   setUserName(data.name);
-  },[])
- <UserContext.Provider value={{userLoggedin:userName}}>
- <header/>
- <outlet/>
- </UserContext.Provider value={{userLoggedin:userName}}>
-
-Header component and other components inside the Provider can access the modified value;
-NOTE: it is very powerful as we can apply provider to somecomponents or the whole app.
-
-------------------------------------------------------------------------------
-const [username,setusername]=useState();
-<UserContext.Provider value={{ loggedInUser:username,setusername }}>   //we can pass setusername so that we can access it anywhere
-      <Router>
-        <Header />
-        <Routes>
-        .
-        .
-        .
-
-Body.js
---------
-
-const {loggedInUser,setusername}=useContext(UserContext);
-<input className='border border-black p-2 ' value={loggedInUser} onChange={(e)=>setusername(e.target.value)}></input>
-so  now on every change of key stroke the loggedInUser changes.
-
------------------------------------------------------------------------
-usecontext and Redux Toolkit Different
-===============================================
-redux is more scalable 
-in useContext we need to make diff context for different types of data.
-
-State Management:
-
-useContext:
-------------
-Primarily designed for managing local component state or sharing state between a few closely related components.
-State is managed within the component or a few related components.
-
-Redux:
-------
-Designed for managing a global state that can be accessed by any component in the application.
-State is stored centrally in a Redux store, and components can subscribe to changes in the state.
-
-
--------------------------------------------------------------------EPISODE 12------------------------------------------------------------------
--------------------REDUX----------------------------------------
---------Works in the data Layer-----------------------
-NOTE:REDUX AND REACT ARE DIFF LIB.
-REDUX is a lib used for managing state. (Another lib is zustand)
-Application becomes easier for debugging
-              TWO LIB
-                 |
-        -  - - -----------
-        |                 |
-        React-Redux     Redux-Toolkit(packages are intended to be 
-                                        the standard way of writing redux logic)
-
-VANILLA REDUX IS THE OLDER REDUX(WHICH SAYS DON'T MUTATE STATE)
---------REDUX STORE---------
-we can keep all the data in our redux store but slice wise .Slices can be (one is cart data slice),(other is loggedin user slice)
-
-CART button  (Click) ----->Dispatches an action---->calls a function---->which internally modifies the cart(slice)(updates the slice)
--------------
-What is the function?
-this is called as reducer function.
-
-Now how to read data from the cart slice in the redux store??
---------->from cart slice---->|Selector|----------->that reads the data ------->modifies the cart component.
-                |SELECTOR|------>(phenomenon is called subscribing to the store)(our header component have subscribed the store)
-npm i @redux/toolkit 
-npm i react-redux
-
--Build a store         ----configureStore()
--Connect the store to our app  ----------------<Provider store={}> 
--Cart (cartSlice)          ---------------------createSlice
--dispatch(Action)                 ---------------------reducers
--Selector     ----is nothing but a react hook ----useSelector
-
-const handleItems=(items)=>{
-
-}
-onClick={()=>handleItems(items)}//correct way
-onClick={handleItems(items)}//NOT correct as we do not want to immediate call a function but call it when clicked
-
------------------------------------
-const cartItems=useSelector((store)=>store.cart.items);//from the store we are only subscribing to a slice
-
-or
-const store=useSelector((store)=>store)//subscribe to the whole store
-const cartItems=store.cart.items;
-
-note: not an effictive one as we donnot need any sort of update for other slice rather than cart SLice
------------------------------------------
-
-in appstore the slices are kept in 
-reducer:{
-  cart:cartReducer
-}
-
-in cartSlice 
-the reducer functions are kept in
-reducers:{
-  //mutating state directly, donot have to return and redux uses immer behind the scenes
-  addItem:(state,action)=>{     //state is a local var having value of initialState
-
-      state=["akhshay"]     //not mutating jst adding a another reference to the state
-
-      state.items.push()     //mutating the state
-  }
-}
-
-but we export the cartSlice.reducer;
-
-reducers:{
-  clearCart:(state,action)=>{ 
-
-    //in redux we cannot do simply console log--we need to use current
-    state=[];
-    console.log(current(state));
-    //either update the existing state or return the new state
-      state.items.length===0;
-  -------OR----------
-      return {items:[]}
-  }
-}
-
------------------------------------------------------------EPISODE 13-------------------------------------------------------------------------
-TESTING
-------------
-
-Types of testing (Developers can do):
-1.Manual Testing --which mainly we focus whether the functionality is working fine or not according to the code.
-(we particularly see the functionality of the specific type but not the whole application)
-
-(So to check the whole application where a single line of code causes error for other functionalities or not)
-2.writing Test cases---that automatically tests our whole application.
-
-    -Unit Testing                ----(only one specific component)
-    -Integration testing              -----------(test the flow of data and control between diff components that will lead to some result)
-    -End to end testing(e2e testing)    ---------------(User lands on the page...and actions performed --to user leaving the page)
-
-   NOTE   ::::: Developers are responsible for unit testing and Integration testing
-
----use React-testing library to write test cases in React
-(React testing lib is build on DOM testing LIB)
-React testing lib takes "jest" delightful js framework 
-
--------INSTALLING PROCEDURE--------
-install--1.react-testing lib  2.jest
-now install jest working with Babel
-if we config babel and parcel has its diff babel config behind the scenes so that will conflict ....
-so we need to go to parcel then js then using other tools and write parcel.rc  basically to disable default babel transpilation
-then perforn npx jest --init
-install jsdom library
------------------------------------------------------------------EPISODE 14---------------------------------------------------------------------------------------
-NOTE:
------------------------------------
-LIB -FORMIK for validation of forms
---------------------------------
-IN FORM:
- <form onSubmit={(e)=>e.preventDefault}/>do this as if not done it tries to submit the form automatically which refreshes our page 
- ,so to prevent it we do e.preventDefault
-
---------------------------USEREF --------------------------
-To capture the email entered or password we can create individual state variable and onChange the value of the variable changes and then bind the 
-valu of the input with the state variable
-Other way:  is to use ref of the input
---------
-This is where useRef () hook comes to the picture
-
-const email=useRef(null);
-
-<input ref={email}---------/>
-<button onClick={()=>console.log(email.current.value)}
-
-----FIREBASE AUTHENTICATION-------------
-
-1.create a project
-2.web and all actions and write the code in firebase.js according to instructions
-3.go to authentication and enable email/password
-4.then go to authentication doc and to to password auth then move to create password 
-  -there is a satement of auth which needs to ba writtern onced as it is used everywhere so write it in firebase.json
-5. write the logic of sign in and sign up
-6.Make a redux store of user slice -----
-6.1.For authentication handling go to onAuthChange of firebase authentication docs(manage users)
-     - onAuthChange handles whenever there is a change in the user details
-7.In useEffect {
-  write the logic of auth change and in sign in addUser to the redux store(Body.js)
-  and in sign out remove User from redux store
-}
-
-8.now in header do a sign out button and oncClick a event occurs
-that from firebase docs go to password authentication and go to sign out logic and if sign out navigate to home page(Header.js)
-
-9.To update teh name of the user ...go to mange users and update user profile if sign up is done correctly.
-and once update then navigate (Login.js)
-
-10. useSelector to fetch the icon from the redux store and dispaly only if the user is not null
-11.Bug---in signup the icon was not updating 
-    -So made the dispatch addUser after the profiel goth updated --- from auth.currentUser which consistes the current user
-
-
-------------------------------------------------------------EPISODE 15 & 16-----------------------------------------------------------------------------
-FIXING BUG-
---------------
-
-when we are in / home page or login page changing the url to /browse we used to navigate which is not right .and if after the sign in user wants to go the 
-login page do not allow...
-
-SOLVING   :replacing the onaUth change to the header component as we know header is present everywhere so useEffect works fine in that as everytime
------------             there is a change or reload the header is very everywhere so once sign in /sign up it takes us to the browse page and after sign out
-                            it takes to login in page
-
-in useEffect() return the function as when called
-because when the component unmounts we donot want any sort of change.
-
-TMDB --movie database
-  -Login
-   -Edit profile
-   -API (left side)   find ur api key and api access token
-
-go to movie list -now playing---on demo code const options is mandatory to pass everytime so keep it in constants.
-   NOTE::::::::      ALL the aPi calls happen as we wrap our APP in strictmode
-------------------
-Why happens twice?React does extra rendering to check the consistency of ur data
-
-Browser
--------
-
--MAIN CONTAINER
-  -VideoBackground
-  -Video title
--SECONDARYCONTAINER
- -MovieList *n
- -cards *n
-
- NOTE: there can be multiple trailers of one movie or no trailer if no trailer take the first vid of that particular movie and it trailer exits take trailer
-
- --MOVIElIST :POPULAR
-      -MOVIECARDS *N
- ---mOVIELIST:NOW playing
-  |
-  |
-  |
-  |
-  (N)
-
-  Do tmdb image URL to get the CDN url
-
-
-  OPENAI:platform.openai
-  npm open ai---helper func to make api call directly
-  then after using console(gptresult.choices)
-
-  then go to tmdn search movies....and fetch the search api to fetch the individual details of the suggested movies'
-
-  .env  file all the secret keys are kept ---with REACT_APP at the starting
-
-  when we are clicking on gpt search or homepage we are making api call where our movies are already had the trailer vid
-  so we use memoization , to prevent refetching
-
-  const nowPlayingMovies=useSelector(store=>store.movies.nowPlayingMovies);
-  useEffect(()=>{
-
-        //memoisation   
-        !nowPlayingMovies && getNowPlayingMovies();
-    },[])
-
-    NOTE: we can tell user to give their open ai key and the users can use it instead of using our key---(implement in ur upcomming projects)
-    ---------Responsiveness-----
-  default :mobile(small screen )
-    sm: greater than small screen  (tab)
-    md :greater thann meduim screen(desktop)
-
-
-    -------------------------------------------------BONUS 1 && 2----------------------------------------------------------------------------------
-    Machine Coding Interview Round
-    ------------------------------------
-
-    1.Requirements (on the topic: what features to be added)
-    2.Tech Stack(UI layer:Tailwind css  DataLayer:React,react-router-dom,Redux and so on---)
-    3.Planning of the structure of our app(visualisation)
-
-    ReportWebVitals
-    ------------------
-    Web Vitals are a set of useful metrics that aim to capture the user experience of a web page. In Create React App, a third-party library is used
-     to measure these metrics (web-vitals). 
-
-    strictmode--React's Strict Mode is a development mode only feature for highlighting potential problems in an application. It helps to identify unsafe 
-    lifecycles, legacy API usage, and a number of other features.
-
-
-    GRID IN CSS- the whole grid is basically divided into 12 grid section 
-
-    AXIOS---fetching---for json handling
-
-NOTE:::::::::::
-  IN UTUBE : SEARch apis then search api key utube auth
-    IN GCP while making api key---(GO to lib and enable the utube v3 api) to access the token ( so that it works)
-
-    Header remains same:In BOdy only the watchPage,Maincontainer Changes so keet it in Children 
-    and do <Outlet/> after SIdebar in the Body.js
-
-
-    const [searchParams] = useSearchParams(); is given if not using normal params---/watch?v=
-
-    it is native browser search params;;;
-    we do v.get()   //as v was the name of the id
-
-    Debouncing---
-    suppose with every key stroke the api is getting an api call 
-
-    key-i 
-    render the component 
-    call the useEffect
-    start the timer -make an api call after 200ms
-
-    key-ip
-    destroy the component (useEffect return Method)
-    re-render the component 
-    call the useEffect
-    start the timer -make an api call after 200ms
-
-
-    //--in searching if we search the same keyword again it will not make an API call
-    //we use redux to do it.
-
-
-    ----------------------------------------------BONUS 3----------------------------------------------------------------------------------------
-    Live Chat ---Challenges face::---
-    1.Get Live Data (Data Layer )
-    2.UI Layer update (UI Layer)
-
-    Live Chat 
-    --Each comment is a div but when we comment comes it appends the new div ...
-    --this may lead to heavy weight of the HTML--
-    we need to handle the complications as well as the the UI experience
-
-    Two ways we can update the Live Data---
-    1.web socket (It creates an handshake between the UI and Server)(Bi-directional Live data)(No interval)
-        They are Heavy we do not need it.(eg-trading,websockets)
-    2.Long polling /(API polling) Ui requests  the Server and server send the data to the client. After the some interval it checks whether new data
-         has arrived or not
-          EG: Gmail,Utube live chat
-
-  UI experience---
-  that if after sometime it starts deletes the the live comments..it holds only a upto a certain length
-
-  //Infinte scroll Working::::::
-  Like OnScroll event -->we are making an api call an updating the redux store by appending the videos at the end.
-
-
-
-
-  --------------------------------------------------------------------BONUS 4----------------------------------------------------------------------------------------
-
-  useMemo
-  ----------
-
-useMemo is a React Hook that lets you cache the result of a calculation between re-renders.
-
-const cachedValue = useMemo(calculateValue, dependencies)
---------------------------------------------------------------
-CODE
--------------------------------------------------------------
-const Demo = () => {
-  const [text, setText] = useState(0);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-
-  // const prime = findPrime(text);
-  const prime = useMemo(() => findPrime(text), [text]);
-
-  return (
-    <div
-      className={
-        "m-4 p-2 w-96 h-96 border border-black " +
-        (isDarkTheme && "bg-gray-900 text-white")
-      }
-    >
-      <div>
-        <button
-          className="m-10 p-2 bg-green-200"
-          onClick={() => setIsDarkTheme(!isDarkTheme)}
-        >
-          Toggle
-        </button>
-      </div>
-      <div>
-        <input
-          className="border border-black w-72 px-2"
-          type="number"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-      </div>
-      <div>
-        <h1 className="mt-4 font-bold text-xl">nth Prime : {prime}</h1>
-      </div>
-    </div>
-  );
-};
-export default Demo;
----------------------------------------------------------------------------
-EXPLANATION
-------------
-So finding nth prime number is a heavy operation so at every change in value in input box our component re-renders.So when we add the toggle 
-effect of dark and light theme it similarly re-renders the component and calls nth prime methos which is not required ...Which effects the user experience
-and lags our browser experience.
-
-so when we are doing toggle of dark and light theme, we donot need to call the nth prime method, so call the method when there is a change in the 
-input text..So we useMemo()
-
-const prime = useMemo(() => findPrime(text), [text]);
-
-useCallback()
-----------------
-useCallback is a React Hook that lets you cache a function definition between re-renders.
-
-const cachedFn = useCallback(fn, dependencies)
-
-useRef()
--------------
-useRef is a React Hook that lets you reference a value that’s not needed for rendering.
-
-const ref = useRef(initialValue)
-
-CODE
--------
-mport { useRef } from 'react';
-
-function MyComponent() {
-  const intervalRef = useRef(0);
-  const inputRef = useRef(null);
-  //print this value
-  console.log(intervalRef.current.value)
-  return(
-    <input ref={intervalRef}/>
-  )
-
-}
-
-
-Differnce between useRef,useState ,lets-
-----------------------------------------------
-
-const [y, setY] = useState(0);
-  let x = 0;
-
-  const ref = useRef(0);
-  /** not like => ref = 0
-   * ref = { current: 0 }
-   *
-   *
-   * */
-
-  console.log("Rendering....");
-
-//for let
-------------
-  <button
-          onClick={() => {
-            x = x + 1;
-            console.log("x=" + x);
-          }}
-        >
-          Increase x
-        </button>
-        <span className="font-bold text-xl">Let = {x}</span>
-
-//for useState
---------------------
-<button
-          onClick={() => {
-            setY(y + 1);
-          }}
-        >
-          Increase Y
-        </button>
-        <span className="font-bold text-xl">State = {y}</span>
-
-//for ref
---------------
-<button
-          onClick={() => {
-            ref.current = ref.current + 1;
-            console.log("ref=", ref.current);
-          }}
-        >
-          Increase Ref
-        </button>
-        <span className="font-bold text-xl">Ref = {ref.current}</span>
-
-Output:
------------
-1. Click on let button in DOM----- NO CHANGE----
-But in console value changes
-NOTE: but on every re-render it starts the value again from its initial value i.e 0
-------
-
-2. Click on state button the components re-renders and changes the value of the Y
-
-3. Click on ref button ---no change in the DOM ----(UI)
-but in console the value changes
-NOTE: but on every re-render it do not  starts the value again from its initial value rather it updates the UI and starts the previous value
------     where it left 
-
-
-
