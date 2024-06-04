@@ -1174,6 +1174,14 @@ State is stored centrally in a Redux store, and components can subscribe to chan
 
 
 -------------------------------------------------------------------EPISODE 12------------------------------------------------------------------
+------------Searching Menchanism in search Bar----------------------
+ 
+Fetching Relevant Suggestions on Keystroke
+
+Debouncing: Implement debouncing to handle rapid keystrokes. Debouncing delays the function execution until after a certain amount of time has passed since the last keystroke, improving performance and preventing excessive API calls.
+
+Search Algorithm: Match the current input with stored search history to find and display relevant suggestions.
+
 
 -------------------REDUX----------------------------------------
 --------Works in the Data Layer-----------------------
