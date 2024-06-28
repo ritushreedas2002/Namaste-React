@@ -530,6 +530,44 @@ useState
 useState() is used to create local state variables inside your functional component (so always call it inside your functional component, and always call it at the top of your component(preferred))
 NOTE: do not create state variables inside conditional statements(if-else)(otherwise it creates inconsistencies) or for loops or functions.
 
+useContext
+----------------
+It is state managemnet hook suppose i want to use a variable count in various component. Instead of props drilling we can accessit directly through useContext.
+
+>Context>Context.js
+import {createContext} from 'react'
+export const counterContext=createContext(0); //initial value
+
+App.js
+-----------
+//////Those components which are surrounded ny the provider can acces the counterContext
+import {counterContext} from "/context/context.js"
+const app=()=>{
+    const[count,setcount]=useState(0);
+    return (
+        <counterContext.Provider value={{count,setcount}}>  //value will the state value which we wanted to pass
+            <Navbar/>
+            <Component1/>
+        </counterContex.Provider>
+    )
+}
+
+Component.js
+--------------
+import {counterContext} from "context/context.js"
+import {useContext} from "react"
+const component=()=>{
+    const counter=useContext(useContext);
+    return (
+        <h1>
+            {counter.count}
+        </h1>
+        <button onClick={()=>counter.setcount(counter.count+1)}/> //to change the value also on click on the button
+    )
+}
+
+
+
 ** npm i -D react-router-dom
 npm react-router-dom is installed to access the router facility to enhance the multi-page concept
 e.g if I write /about in url we will redirect to the about us page
