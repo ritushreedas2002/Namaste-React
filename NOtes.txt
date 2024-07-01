@@ -1,3 +1,6 @@
+In javascript what we did we selected the elements and we did the changes
+in react we just tell to apply the changes.
+
 -------------------------------------------------EPISODE 1--------------------------------------------------------------------------------
 CDN LINKS FOR REACT:
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -414,6 +417,8 @@ Whenever there is a change in state variable there is a change in DOM and react 
 
 React is fast-> because it does efficient DOM manipulation-> in Virtual DOM
 ** Finding out the difference between two HTML codes is tough, Finding out the difference between two objects (virtual DOM) is fast
+
+NOTE:::useState -->re-render and in useRef -->does not re-render
 
 --------------------------------------------------------------EPISODE 6--------------------------------------------------------------------------------
 
