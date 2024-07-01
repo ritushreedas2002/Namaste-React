@@ -524,6 +524,21 @@ this way we never update our original list of restaurants, i.e., listOfRestauran
 
 --------------------------------------------------------------EPISODE 7--------------------------------------------------------------------------------
 
+1.Mounting
+2.Updating(Stays for a while)
+3.Unmounting
+UseEffects are used for implementing sideeffects and then unmounts
+
+useLayoutEffect
+--------------------
+after real dom gets synchronise with the virtual dom
+
+useEffect(()=>{
+    //mounting
+    //unmounting
+
+    ()=>{}//unmounting
+},[])
 useEffect
 ------------
 1. useEffect(()=>{}), if no dependency array is given, then useEffect will be called at every render of the component.
