@@ -1683,3 +1683,91 @@ NOTE:::::::::::
   //Infinte scroll Working::::::
   Like OnScroll event -->we are making an api call an updating the redux store by appending the videos at the end.
 It is the final line 1619
+
+----------------------------------------------------AXIOS-----------------------------------------------------
+Axios is a popular JavaScript library used to make HTTP requests from both the browser and Node.js. It provides a simple and clean API for sending asynchronous HTTP requests to REST endpoints and performing CRUD operations (Create, Read, Update, Delete). Axios is often used in web applications to communicate with back-end services, retrieve data, and update the user interface accordingly.
+
+Key Features of Axios
+1.Promise-Based: Axios is built on Promises, making it easy to use with async/await syntax for handling asynchronous operations.
+
+2.Request and Response Interception: Axios allows you to intercept requests or responses before they are handled, enabling features like request authentication, logging, and error handling.
+
+3.Automatic JSON Data Transformation: Axios automatically transforms JSON data, simplifying the process of sending and receiving JSON data between the client and server.
+
+4.Error Handling: It provides robust error handling and status code-based responses, making it easier to handle different types of errors.
+Support for Request Cancellation: Axios supports canceling requests using the CancelToken API.
+
+
+
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const FormDemo = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post('https://your-server-endpoint.com/api/form', formData)
+      .then(response => {
+        console.log('Form submitted successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('There was an error submitting the form:', error);
+      });
+  };
+
+  return (
+    <div>
+      <h2>Contact Form</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default FormDemo;
+
+e.preventDefault() method is used to prevent the default behavior of the form submission. By default, when a form is submitted, the browser will reload the page. This is often not desired behavior in modern web applications, where you want to handle the form submission via JavaScript, typically sending the form data asynchronously to a server without reloading the page.
+
+Why Use e.preventDefault()?
+Prevent Page Reload: The main reason is to prevent the default form submission behavior, which causes the page to reload. This allows you to handle the form submission using JavaScript and provide a better user experience.
+
+Single-Page Applications (SPA): In SPAs built with frameworks like React, Angular, or Vue, page reloads break the smooth experience provided by these frameworks. Preventing the default behavior keeps the application in its current state.
+
+Asynchronous Requests: It allows you to send the form data to the server using an asynchronous request (like with Axios), giving you more control over what happens next, such as displaying success/error messages, updating the UI dynamically, etc.
+
+
