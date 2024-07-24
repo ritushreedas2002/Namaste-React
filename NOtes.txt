@@ -1,6 +1,57 @@
 In javascript what we did we selected the elements and we did the changes
 in react we just tell to apply the changes.
 
+IMPORTANT CONCEPTS OF JS
+=====================================
+
+1.Javascript is Synchronous and single threaded language--->(code is ran one by one...and a single threaded environment is maintained.The second line of code will run after the first line has been executed)
+
+CALLBACKS
+=============
+example: i am giving an order and after the order prepares ping me or call me ..this pinging me is callback
+
+const notify=()=>{
+    console.log("Notify");
+}
+
+const order=(item,callback)=>{
+    console.log("preparing food");
+    setTimeOut(()=>{
+        console.log("your order has been prepared");
+        callback();
+    },2000)
+}
+
+order("burger",notify);
+console.log("hello");
+
+output
+========
+preparing food
+hello
+your order has been prepared
+Notify
+
+
+******this gives a way to the async world in the synchronised environment
+here we called the order func with the burger as item and the callback.printing preparing then setimeout start ticking clock but js does not wait prints hello then after the time finishes it call the method inside the settimeout from the callbackqueue to the callstack(as callback functions stays in callback queue) (Concept of eventLoop : it is gateway that checks whether the function enetered in the callback queue or not), then prints the order prepared and then calls the notify function
+
+ASYNCHRONOUS FUNCTION
+=========================
+1.Allows multiple functions to be performed without waiting
+2.the function that goes out of the flow of the execution of the synchronous way.
+like network requests,fetching data
+
+PROMISE 
+==========
+Promise is an object returned from an as a response or failure from an asynchronous operation.
+suppose const response=fetch();
+console.log(response)//Error
+
+we do .then ()to resolve the response
+.catch if any error is there
+
+alternative we use await inside an asynchronous operation instead of .then and .catch
 -------------------------------------------------EPISODE 1--------------------------------------------------------------------------------
 CDN LINKS FOR REACT:
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
