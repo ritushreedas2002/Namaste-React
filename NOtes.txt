@@ -729,6 +729,41 @@ root.render(
  <RouterProvider route={appRouter}/>
 );
 
+=====================
+OUTLET
+======================
+add a header over each route
+in app.jsx
+=============
+const router=createBrowserRouter(
+createRoutesFromElements(
+    <Route path="/dashboard/*" elemet={<RootLayout/>}>
+        <Route path="/profile" elemet={<home/>}
+        <Route path="/about" elemet={</About>}
+    </Route>
+)
+)
+return (
+    <RouterProvider router={router}/>
+)
+
+in RootLayout.jsx
+===================
+return (
+    <>
+    <nav>
+    <ul>
+        <Link to ="/">Home</Link>
+        <Link to ="/about">About</Link>
+    </ul>
+    </nav>
+    <main><Outlet/></main>
+</>
+    
+)
+So basically what happens now on click on navbar in profile it takes me to the /dashboard .profile page
+
+
 now when path "/" is rendered the <Body/> is rendered in place of <Outlet/>
 now when path "/about" is rendered the <About> is rendered in place of <Outlet/>
 so the Header component remains intact and below that we add the outlet...
